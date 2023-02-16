@@ -68,7 +68,7 @@ const Post: React.FC<Post> = (props) => {
   const [expanded2, setExpanded2] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
   const [likes, setLikes] = useState(props.likes);
-  const [newComment, setNewComment] = React.useState('');
+  const [newComment, setNewComment] = useState('');
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
