@@ -5,6 +5,7 @@ import NavBar from "components/Nav"
 import BotNav from "components/BotNav"
 import NextLink from "next/link";
 import { forwardRef } from "react";
+import { usePeopleQuery } from "@/generated/graphql";
 
 const LinkBehaviour = forwardRef(function LinkBehaviour(props, ref) {
   //@ts-ignore
@@ -23,9 +24,9 @@ const theme = createTheme({
   components: {
     background: {
       paper: '#eeeeee',
-      default:'#7c4dff',
+      default: '#7c4dff',
     },
-    
+
     MuiLink: {
       defaultProps: {
         //@ts-ignore
@@ -51,13 +52,16 @@ const theme = createTheme({
 );
 
 const Home = () => {
+
+  const {data,loading,error} =usePeopleQuery();
   return (
     <ThemeProvider theme={theme}>
       <><NavBar /><Posts /><BotNav /></>
 
+
     </ThemeProvider>
-      
-    
+
+
   );
 };
 export default Home;

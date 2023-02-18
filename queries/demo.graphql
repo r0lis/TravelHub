@@ -1,0 +1,8 @@
+query People {
+  users {
+    name
+  }
+  githubUsers {
+    login
+  }
+}

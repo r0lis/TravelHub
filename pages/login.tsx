@@ -37,7 +37,8 @@ const theme = createTheme({
         MuiContainer: {
             styleOverrides: {
                 root: {
-                    background: '#7e57c2',
+                    background: 'rgba(234, 128, 252, 0.8)',
+                    
 
                 }
             }

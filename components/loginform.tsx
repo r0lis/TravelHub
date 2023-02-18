@@ -34,9 +34,11 @@ const Login: React.FC = () => {
     <Box sx={{
       paddingTop: "75px",
       paddingBottom: "75px",
+      height: "70%",
       
     }}>
       <Container sx={{
+        borderRadius:"15px",
         backgroundColor: "whitesmoke",
         display: 'flex',
         justifyContent: 'center',
@@ -44,16 +46,16 @@ const Login: React.FC = () => {
         height: "600px",
         maxWidth: "100%",
         
-      }} maxWidth="lg">
+      }} >
         <Grid
           container
           direction="row"
           justifyContent="flex-start"
           alignItems="center"
-          style={{ minHeight: "100vh" }}
+          style={{ minHeight: "80vh" }}
         >
           <Grid item xs={6}>
-            <Paper elevation={1} sx={{ padding: 5 }}>
+            <Paper elevation={1} sx={{ padding: 5, marginRight:"30px", marginLeft:"50px" }}>
               <form>
                 <Grid container direction="column" spacing={1}>
                   <Grid item>
@@ -120,7 +122,7 @@ const Login: React.FC = () => {
           </Grid>
 
           <Grid item xs={6}>
-            <img src="./img/Zamek_pce_2.jpg" alt="description_of_your_image" style={{ width: "100%", height: "auto", }} />
+            <img src="./img/Zamek_pce_2.jpg" alt="description_of_your_image" style={{ width: "90%", height: "auto", }} />
           </Grid>
         </Grid>
       </Container>
