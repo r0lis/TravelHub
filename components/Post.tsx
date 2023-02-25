@@ -105,7 +105,7 @@ const Post: React.FC<Post> = (props) => {
             {props.avatarIcon}
           </Avatar>
 
-        }
+        }l
 
 
         action={
