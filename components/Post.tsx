@@ -21,6 +21,23 @@ import CommentIcon from '@mui/icons-material/Comment';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Modal from '@mui/material/Modal';
+import { useQuery, gql } from '@apollo/client';
+
+
+const GET_POSTS = gql`
+  query {
+    posts {
+      id
+      userId
+      date
+      title
+      text
+      likes
+      img
+    }
+  }
+`;
 
 interface ExpandMoreProps extends IconButtonProps {
   expand?: boolean;
@@ -61,6 +78,18 @@ interface Comment {
   date: ReactNode;
 }
 
+const style = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  height: '65vh',
+  width: '65vw',
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+};
+
 interface Props { }
 
 const Post: React.FC<Post> = (props) => {
@@ -69,6 +98,9 @@ const Post: React.FC<Post> = (props) => {
   const [isClicked, setIsClicked] = useState(false);
   const [likes, setLikes] = useState(props.likes);
   const [newComment, setNewComment] = useState('');
+
+
+
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -96,124 +128,139 @@ const Post: React.FC<Post> = (props) => {
     setNewComment('');
   };
 
+  const { loading, error, data } = useQuery(GET_POSTS);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :(</p>;
+
   return (
-    <Card sx={{ borderRadius: '10px' }}>
-      <CardHeader
-        avatar={
-
-          <Avatar aria-label="recipe" sx={{ bgcolor: red[500] }}>
-            {props.avatarIcon}
-          </Avatar>
-
-        }l
+    <Box>
 
 
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon sx={{ fontSize: 20 }} />
+      <Card sx={{ borderRadius: '10px' }} >
+        <CardHeader
+          avatar={
+
+            <Avatar aria-label="recipe" sx={{ bgcolor: red[500] }}>
+              {props.avatarIcon}
+            </Avatar>
+
+          } l
+
+
+          action={
+            <IconButton aria-label="settings">
+              <MoreVertIcon sx={{ fontSize: 20 }} />
+            </IconButton>
+          }
+          title={props.firstname + " " + props.surname}
+          subheader={props.date}
+        />
+        <CardMedia
+          component="img"
+          height="auto"
+          image={`./img/${props.img}`}
+          alt="Zamek pce"
+        />
+        <CardContent>
+          <Typography sx={{ color: '#FFFFF', fontSize: 22 }}>
+            {props.title}
+          </Typography>
+        </CardContent>
+        <hr style={{ border: '1px solid #ccc', }} />
+        <CardActions sx={{ paddingBottom: 0, paddingTop: 0 }} disableSpacing>
+          <IconButton aria-label="add to favorites" onClick={handleLikeClick}>
+            <FavoriteIcon style={{ fontSize: 30, color: isClicked ? '#d50000' : 'inherit' }} />
           </IconButton>
-        }
-        title={props.firstname + " " + props.surname}
-        subheader={props.date}
-      />
-      <CardMedia
-        component="img"
-        height="auto"
-        image={`./img/${props.img}`}
-        alt="Zamek pce"
-      />
-      <CardContent>
-        <Typography sx={{ color: '#FFFFF', fontSize: 22 }}>
-          {props.title}
-        </Typography>
-      </CardContent>
-      <hr style={{ border: '1px solid #ccc', }} />
-      <CardActions sx={{ paddingBottom: 0, paddingTop: 0 }} disableSpacing>
-        <IconButton aria-label="add to favorites" onClick={handleLikeClick}>
-          <FavoriteIcon style={{ fontSize: 30, color: isClicked ? '#d50000' : 'inherit' }} />
-        </IconButton>
-        <ExpandMore sx={{ marginLeft: 0 }}
+          <ExpandMore sx={{ marginLeft: 0 }}
 
-          onClick={handleExpandClick2}
-          aria-expanded={expanded2}
-          aria-label="show more"
-        ><CommentIcon sx={{ fontSize: 30 }} /></ExpandMore>
-        <IconButton aria-label="share">
-          <ShareIcon sx={{ fontSize: 30 }} />
-        </IconButton>
+            onClick={handleExpandClick2}
+            aria-expanded={expanded2}
+            aria-label="show more"
+          ><CommentIcon sx={{ fontSize: 30 }} /></ExpandMore>
+          <IconButton aria-label="share">
+            <ShareIcon sx={{ fontSize: 30 }} />
+          </IconButton>
 
 
 
 
-        <ExpandMore
-          expand={expanded}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
-        >
-          <ExpandMoreIcon />
-
-        </ExpandMore>
-      </CardActions>
-
-
-      <Typography sx={{ paddingLeft: 2, color: '#757575', fontSize: 14 }}>{likes} To se mi líbí</Typography>
-      <Collapse in={expanded2} timeout="auto" unmountOnExit>
-        <CardContent>
-          <List>
-            {props.comments.map(comment => (
-              <ListItem key={comment.id}>
-                <ListItemText primary={comment.text} />
-              </ListItem>
-            ))}
-          </List>
-
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            flexWrap="wrap"
-            alignItems="center"
-            py={2}
+          <ExpandMore
+            expand={expanded}
+            onClick={handleExpandClick}
+            aria-expanded={expanded}
+            aria-label="show more"
           >
-            <TextField
-              fullWidth
-              label="Komentář"
-              value={newComment}
-              onChange={handleCommentChange}
-              placeholder="Napiš komentář..."
-              variant="outlined"
-              color="primary"
-            />
-            {newComment.length > 0 && (
-              <Button sx={{ right: 0, marginTop: '5px' }} variant="contained" color="primary" onClick={handleCommentSubmit}>
-                Zveřejnit
-              </Button>
-            )}
-          </Box>
+            <ExpandMoreIcon />
 
-        </CardContent>
-      </Collapse>
+          </ExpandMore>
+        </CardActions>
 
 
+        <Typography sx={{ paddingLeft: 2, color: '#757575', fontSize: 14 }}>{likes} To se mi líbí</Typography>
+        <Collapse in={expanded2} timeout="auto" unmountOnExit>
+          <CardContent>
+            <List>
+              {props.comments.map(comment => (
+                <ListItem key={comment.id}>
+                  <ListItemText primary={comment.text} />
+                </ListItem>
+              ))}
+            </List>
 
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          <Typography paragraph>Popis:</Typography>
-          <Typography paragraph>
-            {props.text}
-          </Typography>
-          <Typography paragraph>
-            {props.text}
-          </Typography>
-          <Typography paragraph>
-            {props.text}
-          </Typography>
-          <Typography>
-            {props.text}
-          </Typography>
-        </CardContent>
-      </Collapse>
-    </Card>
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              flexWrap="wrap"
+              alignItems="center"
+              py={2}
+            >
+              <TextField
+                fullWidth
+                label="Komentář"
+                value={newComment}
+                onChange={handleCommentChange}
+                placeholder="Napiš komentář..."
+                variant="outlined"
+                color="primary"
+              />
+              {newComment.length > 0 && (
+                <Button sx={{ right: 0, marginTop: '5px' }} variant="contained" color="primary" onClick={handleCommentSubmit}>
+                  Zveřejnit
+                </Button>
+              )}
+            </Box>
+
+          </CardContent>
+        </Collapse>
+
+
+
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <CardContent>
+            <Typography paragraph>Popis:</Typography>
+            <Typography paragraph>
+              {props.text}
+            </Typography>
+            <Typography paragraph>
+              {props.text}
+            </Typography>
+            <Typography paragraph>
+              {props.text}
+            </Typography>
+            <Typography>
+              {props.text}
+            </Typography>
+          </CardContent>
+        </Collapse>
+
+      </Card>
+    </Box >
+
+
+
+
   );
 };
 export default Post;
+

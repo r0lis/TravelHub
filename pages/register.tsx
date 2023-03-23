@@ -1,5 +1,5 @@
 import { Container, createTheme, Typography } from "@mui/material";
-import LoginForm from "@/components/loginform";
+import RegisterForm from "@/components/registerform";
 import NextLink from "next/link";
 import { forwardRef } from "react";
 import { ThemeProvider } from "@emotion/react";
@@ -51,7 +51,7 @@ const Login = () => {
     return (
         <ThemeProvider theme={theme} >
             <Container maxWidth="xl">
-                <LoginForm />
+                <RegisterForm />
             </Container>
 
         </ThemeProvider>
@@ -59,4 +59,3 @@ const Login = () => {
     );
 };
 export default Login;
-

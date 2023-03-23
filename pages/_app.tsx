@@ -7,6 +7,8 @@ import React from 'react'
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { getApolloClient } from '@/utility/apollo-client'
 import { ApolloProvider } from '@apollo/client'
+import { AuthContextProvider } from '@/components/AuthContextProvider'
+
 
 const client = getApolloClient({ forceNew: false });
 
@@ -14,9 +16,12 @@ const client = getApolloClient({ forceNew: false });
 export default function App({ Component, pageProps }: AppProps) {
   return (
 
-    <ApolloProvider client={client}>
+    <AuthContextProvider>
+      <ApolloProvider client={client}>
       <Component {...pageProps} />
     </ApolloProvider>
+    </AuthContextProvider>
+    
 
 
 

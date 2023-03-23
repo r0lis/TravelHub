@@ -12,13 +12,11 @@ import {
   IconButton,
   InputAdornment,
   Box,
-  Typography,
-  Link,
 } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
-const Login: React.FC = () => {
+const Register: React.FC = () => {
   const [values, setValues] = useState<{
     showPass: boolean;
   }>({
@@ -28,16 +26,10 @@ const Login: React.FC = () => {
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
   const router = useRouter()
-
   const handleForm = async (event: FormEvent) => {
-    event.preventDefault()
-    try {
-      await authUtils.login(email, password);
-      router.push("/home")
-    } catch (e) {
-      const err = e as FirebaseError
-      err.code === 'auth/user-not-found' && alert('User not found')
-    }
+      event.preventDefault()
+      await authUtils.register(email, password);
+      return router.push("/home")
   }
 
   const handlePassVisibilty = () => {
@@ -54,8 +46,7 @@ const Login: React.FC = () => {
       height: "70%",
     }}>
       <Container sx={{
-
-        borderRadius: "15px",
+        borderRadius:"15px",
         backgroundColor: "whitesmoke",
         display: 'flex',
         justifyContent: 'center',
@@ -70,10 +61,8 @@ const Login: React.FC = () => {
           alignItems="center"
           style={{ minHeight: "80vh" }}
         >
-
           <Grid item xs={6}>
-            <Paper elevation={1} sx={{ padding: 5, marginRight: "30px", marginLeft: "50px" }}>
-
+            <Paper elevation={1} sx={{ padding: 5, marginRight:"30px", marginLeft:"50px" }}>
               <form onSubmit={handleForm}>
                 <Grid container direction="column" spacing={1}>
                   <Grid item>
@@ -121,24 +110,12 @@ const Login: React.FC = () => {
 
                   <Grid item>
                     <Button type="submit" fullWidth variant="contained">
-                      Sign In
+                      Register
                     </Button>
                   </Grid>
                 </Grid>
-                <Box sx={{ marginTop: "5px" }}>
-                  <Typography align="center">
-                    Nemáte účet?
-                    <Link sx={{ marginLeft: "5px" }} href="/register" underline="none">
-                      Registrovat</Link>
-                  </Typography>
-                </Box>
-
               </form>
-
-
             </Paper>
-
-
           </Grid>
 
           <Grid item xs={6}>
@@ -150,4 +127,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default Register;

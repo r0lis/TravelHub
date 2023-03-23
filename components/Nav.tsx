@@ -14,6 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Badge from '@mui/material/Badge';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Image from "next/image";
+import { useAuthContext } from './AuthContextProvider';
 
 
 
@@ -57,9 +58,10 @@ const ResponsiveAppBar: React.FC = () => {
     setAnchorElUser(null);
   };
 
-
+  const {user, loading} = useAuthContext();
+  
   return (
-    <AppBar sx={{width:'100%'}} position="static"  >
+    <AppBar sx={{width:'100', margin:'0', padding:'0'}} position="static"  >
       <Container >
         <Toolbar disableGutters>
 
@@ -203,7 +205,7 @@ const ResponsiveAppBar: React.FC = () => {
                   <Typography textAlign="center">{setting.label}</Typography>
                 </MenuItem>
               ))}
-
+              
             </Menu>
 
           </Box>

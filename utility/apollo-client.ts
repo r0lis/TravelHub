@@ -1,5 +1,7 @@
+import { authUtils } from '@/firebase/auth.utils';
 import { ApolloClient, ApolloLink, HttpLink, InMemoryCache } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
+import { setContext } from "@apollo/client/link/context";
 // import { auth } from '../components/userContext';
 const isServer = typeof window === 'undefined';
 // source: https://github.com/shshaw/next-apollo-ssr
@@ -7,6 +9,20 @@ const isServer = typeof window === 'undefined';
 const windowApolloState = !isServer && window.__NEXT_DATA__.apolloState;
 let CLIENT: ApolloClient<any>;
 const endpoint = '/api/graphql';
+const oAuthLink = () =>
+  //@ts-ignore
+  setContext(async ({ operationName }, { headers }) => {
+    const user = authUtils.getCurrentUser() || null;
+    const jwtToken = user ? await user.getIdToken() : null;
+    console.log("USER",user);
+    return {
+      headers: {
+        ...headers,
+        authorization: jwtToken ? `Bearer ${jwtToken}` : '',
+      },
+    };
+  });
+  
 const logoutLink = (logout: VoidFunction) =>
   onError(({ graphQLErrors, networkError }) => {
     if (networkError) {
@@ -56,7 +72,7 @@ export function getApolloClient(parameters: ApolloClientProps) {
       uri: endpoint,
       cache: new InMemoryCache().restore(windowApolloState || {}),
       credentials: 'same-origin',
-      link: ApolloLink.from(isServer || !logout ? [httpLink()] : [logoutLink(logout), httpLink()]),
+      link: ApolloLink.from(isServer || !logout ? [oAuthLink(), httpLink()] : [oAuthLink(), logoutLink(logout), httpLink()]),
       /**
         // Default options to disable SSR for all queries.
         defaultOptions: {

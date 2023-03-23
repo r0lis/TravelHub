@@ -1,6 +1,13 @@
 import { createYoga, createSchema } from 'graphql-yoga'
 import { gql } from 'graphql-tag';
 import axios from 'axios';
+import { verifyToken } from '@/server/verifyToken';
+import { DecodedIdToken } from 'firebase-admin/lib/auth/token-verifier';
+
+type Context = {
+  user?: DecodedIdToken | undefined
+}
+
 const typeDefs = gql`
  type Query {
   users: [User!]!
@@ -36,10 +43,50 @@ type Comment {
   text: String
   date: String
 }
+
+type Mutation {
+    createPost(
+      userId: Int!,
+      date: String!,
+      title: String!,
+      text: String!,
+      likes: Int!,
+      img: String!
+    ): Post
+  }
 `;
+const posts = [
+];
 const resolvers = {
+  Mutation: {
+    createPost: (
+      _: any,
+      { userId, date, title, text, likes, img }: {
+        userId: number,
+        date: string,
+        title: string,
+        text: string,
+        likes: number,
+        img: string,
+      }
+    ): any => {
+      // Vytvořit nový příspěvek a vrátit ho jako odpověď na mutaci
+      const newPost = {
+        id: posts.length + 1,
+        userId,
+        date,
+        title,
+        text,
+        likes,
+        img,
+      };
+      posts.push(newPost);
+      return newPost;
+    },
+  },
+
   Query: {
-    users: () => {
+    users: (content: Context) => {
       return [
         { 
           id: 1,
@@ -136,6 +183,7 @@ const resolvers = {
       },
     ]
     },
+    
   },
 };
 
@@ -153,4 +201,13 @@ export default createYoga({
   schema,
   // Needed to be defined explicitly because our endpoint lives at a different path other than `/graphql`
   graphqlEndpoint: '/api/graphql',
+  context: async (context) => {
+    const auth = context.request.headers.get('authorization');
+    console.log(auth);
+    return {
+      user : auth
+        ? await verifyToken(auth)
+        : undefined
+    } as Context
+  }
 })

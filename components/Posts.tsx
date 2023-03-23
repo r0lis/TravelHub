@@ -6,6 +6,9 @@ import Box from '@mui/material/Box';
 import Post from 'components/Post';
 import { Container } from '@mui/system';
 import { UserPosts  } from '../types'
+import { useAuthContext } from './AuthContextProvider';
+
+
 
 const posts : Array<UserPosts> = [
   { id: 1, nickname:"Jouda", firstname:"Pepek", surname:"Namornik", avatarIcon: "J", title:"Zámek Pardubice",date:"10.11.2015",text:"popis",img:"Zamek_pce_2.jpg",likes: 50,comments: [
