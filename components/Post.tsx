@@ -1,29 +1,27 @@
-import React, { ReactNode, useState } from "react";
-import { styled } from '@mui/material/styles';
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
-import Collapse from '@mui/material/Collapse';
-import Avatar from '@mui/material/Avatar';
-import IconButton, { IconButtonProps } from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import { red } from '@mui/material/colors';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
+import { gql, useQuery } from '@apollo/client';
 import CommentIcon from '@mui/icons-material/Comment';
-import TextField from '@mui/material/TextField';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import ShareIcon from '@mui/icons-material/Share';
+import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Modal from '@mui/material/Modal';
-import { useQuery, gql } from '@apollo/client';
-
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import CardMedia from '@mui/material/CardMedia';
+import Collapse from '@mui/material/Collapse';
+import { red } from '@mui/material/colors';
+import IconButton, { IconButtonProps } from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import { styled } from '@mui/material/styles';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import React, { ReactNode, useState } from 'react';
 
 const GET_POSTS = gql`
   query {
@@ -47,16 +45,12 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
 })(({ theme, expand }) => ({
-  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+  transform: expand ? 'rotate(180deg)' : 'rotate(0deg)',
   marginLeft: 'auto',
   transition: theme.transitions.create('transform', {
     duration: theme.transitions.duration.shortest,
-
   }),
 }));
-
-
-
 
 interface Post {
   id: number;
@@ -69,7 +63,7 @@ interface Post {
   text: ReactNode;
   likes: number;
   img: ReactNode;
-  comments: Comment[];
+  comments: Array<Comment>;
 }
 interface Comment {
   id: number;
@@ -79,7 +73,7 @@ interface Comment {
 }
 
 const style = {
-  position: 'absolute' as 'absolute',
+  position: 'absolute' as const,
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
@@ -90,8 +84,7 @@ const style = {
   p: 4,
 };
 
-interface Props { }
-
+interface Props {}
 
 const Post: React.FC<Post> = (props) => {
   const [expanded, setExpanded] = useState(false);
@@ -99,9 +92,6 @@ const Post: React.FC<Post> = (props) => {
   const [isClicked, setIsClicked] = useState(false);
   const [likes, setLikes] = useState(props.likes);
   const [newComment, setNewComment] = useState('');
-
-
-
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -123,7 +113,7 @@ const Post: React.FC<Post> = (props) => {
       id: props.comments.length + 1,
       text: newComment,
       date: Date.now(),
-      userId: props.comments.length + 1.
+      userId: props.comments.length + 1,
     };
     props.comments.push(newCommentObject);
     setNewComment('');
@@ -131,30 +121,29 @@ const Post: React.FC<Post> = (props) => {
 
   const { loading, error, data } = useQuery(GET_POSTS);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error :</p>;
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+  if (error) {
+    return <p>Error :</p>;
+  }
 
   return (
     <Box>
-
-
-      <Card sx={{ borderRadius: '10px' }} >
+      <Card sx={{ borderRadius: '10px' }}>
         <CardHeader
           avatar={
-
             <Avatar aria-label="recipe" sx={{ bgcolor: red[500] }}>
               {props.avatarIcon}
             </Avatar>
-
-          } l
-
-
+          }
+          l
           action={
             <IconButton aria-label="settings">
               <MoreVertIcon sx={{ fontSize: 20 }} />
             </IconButton>
           }
-          title={props.firstname + " " + props.surname}
+          title={`${props.firstname} ${props.surname}`}
           subheader={props.date}
         />
         <CardMedia
@@ -168,23 +157,24 @@ const Post: React.FC<Post> = (props) => {
             {props.title}
           </Typography>
         </CardContent>
-        <hr style={{ border: '1px solid #ccc', }} />
+        <hr style={{ border: '1px solid #ccc' }} />
         <CardActions sx={{ paddingBottom: 0, paddingTop: 0 }} disableSpacing>
           <IconButton aria-label="add to favorites" onClick={handleLikeClick}>
-            <FavoriteIcon style={{ fontSize: 30, color: isClicked ? '#d50000' : 'inherit' }} />
+            <FavoriteIcon
+              style={{ fontSize: 30, color: isClicked ? '#d50000' : 'inherit' }}
+            />
           </IconButton>
-          <ExpandMore sx={{ marginLeft: 0 }}
-
+          <ExpandMore
+            sx={{ marginLeft: 0 }}
             onClick={handleExpandClick2}
             aria-expanded={expanded2}
             aria-label="show more"
-          ><CommentIcon sx={{ fontSize: 30 }} /></ExpandMore>
+          >
+            <CommentIcon sx={{ fontSize: 30 }} />
+          </ExpandMore>
           <IconButton aria-label="share">
             <ShareIcon sx={{ fontSize: 30 }} />
           </IconButton>
-
-
-
 
           <ExpandMore
             expand={expanded}
@@ -193,16 +183,16 @@ const Post: React.FC<Post> = (props) => {
             aria-label="show more"
           >
             <ExpandMoreIcon />
-
           </ExpandMore>
         </CardActions>
 
-
-        <Typography sx={{ paddingLeft: 2, color: '#757575', fontSize: 14 }}>{likes} To se mi líbí</Typography>
+        <Typography sx={{ paddingLeft: 2, color: '#757575', fontSize: 14 }}>
+          {likes} To se mi líbí
+        </Typography>
         <Collapse in={expanded2} timeout="auto" unmountOnExit>
           <CardContent>
             <List>
-              {props.comments.map(comment => (
+              {props.comments.map((comment) => (
                 <ListItem key={comment.id}>
                   <ListItemText primary={comment.text} />
                 </ListItem>
@@ -226,42 +216,30 @@ const Post: React.FC<Post> = (props) => {
                 color="primary"
               />
               {newComment.length > 0 && (
-                <Button sx={{ right: 0, marginTop: '5px' }} variant="contained" color="primary" onClick={handleCommentSubmit}>
+                <Button
+                  sx={{ right: 0, marginTop: '5px' }}
+                  variant="contained"
+                  color="primary"
+                  onClick={handleCommentSubmit}
+                >
                   Zveřejnit
                 </Button>
               )}
             </Box>
-
           </CardContent>
         </Collapse>
-
-
 
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
             <Typography paragraph>Popis:</Typography>
-            <Typography paragraph>
-              {props.text}
-            </Typography>
-            <Typography paragraph>
-              {props.text}
-            </Typography>
-            <Typography paragraph>
-              {props.text}
-            </Typography>
-            <Typography>
-              {props.text}
-            </Typography>
+            <Typography paragraph>{props.text}</Typography>
+            <Typography paragraph>{props.text}</Typography>
+            <Typography paragraph>{props.text}</Typography>
+            <Typography>{props.text}</Typography>
           </CardContent>
         </Collapse>
-
       </Card>
-    </Box >
-
-
-
-
+    </Box>
   );
 };
 export default Post;
-

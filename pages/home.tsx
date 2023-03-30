@@ -1,18 +1,17 @@
-import * as React from "react";
-import { Container, createTheme, ThemeProvider, Typography } from "@mui/material";
-import Posts from "@/components/Posts";
-import NavBar from "components/Nav"
-import BotNav from "components/BotNav"
-import NextLink from "next/link";
-import { forwardRef } from "react";
-import { usePeopleQuery } from "@/generated/graphql";
+import { createTheme, ThemeProvider } from '@mui/material';
+import BotNav from 'components/BotNav';
+import NavBar from 'components/Nav';
+import NextLink from 'next/link';
+import * as React from 'react';
+import { forwardRef } from 'react';
+
+import Posts from '@/components/Posts';
+import { usePeopleQuery } from '@/generated/graphql';
 
 const LinkBehaviour = forwardRef(function LinkBehaviour(props, ref) {
-  //@ts-ignore
+  // @ts-ignore
   return <NextLink ref={ref} {...props} />;
 });
-
-
 
 const theme = createTheme({
   palette: {
@@ -20,7 +19,7 @@ const theme = createTheme({
       paper: '#fafafa',
     },
     primary: { main: '#6200EE' },
-    secondary: { main: '#7e57c2' }
+    secondary: { main: '#7e57c2' },
   },
   components: {
     background: {
@@ -30,7 +29,7 @@ const theme = createTheme({
 
     MuiLink: {
       defaultProps: {
-        //@ts-ignore
+        // @ts-ignore
         component: LinkBehaviour,
       },
     },
@@ -42,27 +41,22 @@ const theme = createTheme({
 
     MuiContainer: {
       styleOverrides: {
-        root: {
-
-        }
-      }
-    }
-  }
-},
-
-);
+        root: {},
+      },
+    },
+  },
+});
 
 const Home = () => {
-
-  const {data,loading,error} =usePeopleQuery();
+  const { data, loading, error } = usePeopleQuery();
   return (
     <ThemeProvider theme={theme}>
-      <><NavBar /><Posts /><BotNav /></>
-
-
+      <>
+        <NavBar />
+        <Posts />
+        <BotNav />
+      </>
     </ThemeProvider>
-
-
   );
 };
 export default Home;

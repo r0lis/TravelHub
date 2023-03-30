@@ -1,31 +1,30 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import Badge from '@mui/material/Badge';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import Image from "next/image";
+import AppBar from '@mui/material/AppBar';
+import Avatar from '@mui/material/Avatar';
+import Badge from '@mui/material/Badge';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Toolbar from '@mui/material/Toolbar';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import Image from 'next/image';
+import * as React from 'react';
+
 import { useAuthContext } from './AuthContextProvider';
-
-
 
 interface Pages {
   label: string;
   href: string;
 }
 
-const pages: Pages[] = [
+const pages: Array<Pages> = [
   { label: 'Home', href: '/home' },
-  { label: 'Search', href: '/search' }
+  { label: 'Search', href: '/search' },
 ];
 
 interface Setting {
@@ -33,15 +32,18 @@ interface Setting {
   href: string;
 }
 
-
-const settings: Setting[] = [
+const settings: Array<Setting> = [
   { label: 'Profile', href: '/profile' },
-  { label: 'Logout', href: '/login' }
+  { label: 'Logout', href: '/login' },
 ];
 
 const ResponsiveAppBar: React.FC = () => {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
+    null,
+  );
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
+    null,
+  );
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -58,13 +60,12 @@ const ResponsiveAppBar: React.FC = () => {
     setAnchorElUser(null);
   };
 
-  const {user, loading} = useAuthContext();
-  
-  return (
-    <AppBar sx={{width:'100', margin:'0', padding:'0'}} position="static"  >
-      <Container >
-        <Toolbar disableGutters>
+  const { user, loading } = useAuthContext();
 
+  return (
+    <AppBar sx={{ width: '100', margin: '0', padding: '0' }} position="static">
+      <Container>
+        <Toolbar disableGutters>
           <Typography
             variant="h6"
             noWrap
@@ -78,20 +79,17 @@ const ResponsiveAppBar: React.FC = () => {
               letterSpacing: '.4rem',
               color: 'inherit',
               textDecoration: 'none',
-              marginTop: 0
+              marginTop: 0,
             }}
           >
             <Box sx={{ marginTop: 1 }}>
               <Image src="/placeholder.png" alt="logo" width={55} height={55} />
             </Box>
 
-
-            <Box sx={{ padding: "6px", margin: "16px" }} textAlign="center">
+            <Box sx={{ padding: '6px', margin: '16px' }} textAlign="center">
               TRAVEL HUB
             </Box>
-
           </Typography>
-
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -102,9 +100,7 @@ const ResponsiveAppBar: React.FC = () => {
               onClick={handleOpenNavMenu}
               color="inherit"
             >
-
               <MenuIcon />
-
             </IconButton>
 
             <Menu
@@ -126,8 +122,18 @@ const ResponsiveAppBar: React.FC = () => {
               }}
             >
               {pages.map((page: Pages) => (
-                <MenuItem key={page.label} component="a" href={page.href} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ mr: 10, marginLeft: 0, marginTop: 0 }} textAlign="center">{page.label}</Typography>
+                <MenuItem
+                  key={page.label}
+                  component="a"
+                  href={page.href}
+                  onClick={handleCloseUserMenu}
+                >
+                  <Typography
+                    sx={{ mr: 10, marginLeft: 0, marginTop: 0 }}
+                    textAlign="center"
+                  >
+                    {page.label}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -150,7 +156,6 @@ const ResponsiveAppBar: React.FC = () => {
               textDecoration: 'none',
             }}
           >
-
             TRAVEL HUB
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
@@ -164,7 +169,6 @@ const ResponsiveAppBar: React.FC = () => {
                 {page.label}
               </Button>
             ))}
-
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
@@ -173,7 +177,6 @@ const ResponsiveAppBar: React.FC = () => {
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
-
             >
               <Badge badgeContent={17} color="error">
                 <NotificationsIcon />
@@ -201,17 +204,20 @@ const ResponsiveAppBar: React.FC = () => {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting: Setting) => (
-                <MenuItem key={setting.label} component="a" href={setting.href} onClick={handleCloseUserMenu}>
+                <MenuItem
+                  key={setting.label}
+                  component="a"
+                  href={setting.href}
+                  onClick={handleCloseUserMenu}
+                >
                   <Typography textAlign="center">{setting.label}</Typography>
                 </MenuItem>
               ))}
-              
             </Menu>
-
           </Box>
         </Toolbar>
       </Container>
     </AppBar>
   );
-}
+};
 export default ResponsiveAppBar;

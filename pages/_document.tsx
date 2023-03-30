@@ -1,6 +1,7 @@
-import * as React from 'react';
-import Document, { Html, Head, Main, NextScript } from 'next/document';
 import createEmotionServer from '@emotion/server/create-instance';
+import Document, { Head, Html, Main, NextScript } from 'next/document';
+import * as React from 'react';
+
 import { getApolloClient } from '../utility/apollo-client';
 import createEmotionCache from '../utility/createEmotionCache';
 
@@ -85,6 +86,6 @@ MyDocument.getInitialProps = async (ctx) => {
       ...React.Children.toArray(initialProps.styles),
       ...emotionStyleTags,
     ],
-    apolloState
+    apolloState,
   };
 };
