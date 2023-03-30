@@ -92,6 +92,7 @@ const style = {
 
 interface Props { }
 
+
 const Post: React.FC<Post> = (props) => {
   const [expanded, setExpanded] = useState(false);
   const [expanded2, setExpanded2] = useState(false);
@@ -131,7 +132,7 @@ const Post: React.FC<Post> = (props) => {
   const { loading, error, data } = useQuery(GET_POSTS);
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error :(</p>;
+  if (error) return <p>Error :</p>;
 
   return (
     <Box>
