@@ -43,7 +43,6 @@ module.exports = {
         singleQuote: true,
         trailingComma: 'all',
         endOfLine: 'auto',
-        
       },
     ],
     'no-restricted-syntax': 'off',
@@ -59,6 +58,7 @@ module.exports = {
     'react/jsx-filename-extension': 'off',
     'import/extensions': 'off',
     // Use function hoisting to improve code readability
+    // eslint-disable-next-line prettier/prettier
     'no-use-before-define': ['error', { functions: false, classes: true, variables: true }],
     // Allow most functions to rely on type inference. If the function is exported, then `@typescript-eslint/explicit-module-boundary-types` will ensure it's typed.
     '@typescript-eslint/explicit-function-return-type': 'off',
@@ -104,13 +104,7 @@ module.exports = {
         readonly: 'generic',
       },
     ],
-    'unicorn/filename-case': [
-      'error',
-      {
-        case: 'kebabCase',
-        ignore: ['^use'],
-      },
-    ],
+    'unicorn/filename-case': 'off',
     'simple-import-sort/imports': 'error',
     'import/order': 'off', // to prevent conflicts use simple-import-sort/sort for imports sort instead
     'sort-imports': 'off', // to prevent conflicts use simple-import-sort/sort for imports sort instead
@@ -120,7 +114,10 @@ module.exports = {
     'max-depth': ['error', 2],
     complexity: ['error', 16],
     'no-console': ['error', { allow: ['warn', 'error', 'info', 'log'] }],
-    'promise/catch-or-return': ['error', { terminationMethod: ['catch', 'asCallback', 'finally'] }],
+    'promise/catch-or-return': [
+      'error',
+      { terminationMethod: ['catch', 'asCallback', 'finally'] },
+    ],
     'sonarjs/no-small-switch': 'off',
   },
   overrides: [

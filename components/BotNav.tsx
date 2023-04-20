@@ -21,4 +21,5 @@ export const BottomAppBar: React.FC = () => {
     </Container>
   );
 };
+// eslint-disable-next-line import/no-default-export
 export default BottomAppBar;

@@ -1,3 +1,5 @@
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable @next/next/no-img-element */
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import {
@@ -33,9 +35,11 @@ const Login: React.FC = () => {
     event.preventDefault();
     try {
       await authUtils.login(email, password);
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       router.push('/home');
     } catch (error) {
       const err = error as FirebaseError;
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions, no-alert
       err.code === 'auth/user-not-found' && alert('User not found');
     }
   };
@@ -158,4 +162,5 @@ const Login: React.FC = () => {
   );
 };
 
+// eslint-disable-next-line import/no-default-export
 export default Login;

@@ -31,6 +31,8 @@ const typeDefs = gql`
     text: String
     likes: Int
     img: String
+    comments: [Comment!]!
+    user: User!
   }
 
   type Comment {
@@ -73,7 +75,7 @@ const resolvers = {
         img: string;
       },
     ): any => {
-      // Vytvořit nový příspěvek a vrátit ho jako odpověď na mutaci
+      // Create a new post and return it as a response to the mutation
       const newPost = {
         id: posts.length + 1,
         userId,
@@ -82,6 +84,7 @@ const resolvers = {
         text,
         likes,
         img,
+        comments: [],
       };
       posts.push(newPost);
       return newPost;
@@ -124,64 +127,104 @@ const resolvers = {
     posts: () => {
       return [
         {
-          idUser: 1,
+          id: 1,
+          userId: 1,
           date: '10.11.2015',
           text: 'popis',
           img: 'Zamek_pce_2.jpg',
           likes: 50,
           title: 'Zámek Pardubice',
+          comments: [],
+          user: {
+            id: 1,
+            nickname: 'Jouda',
+            firstname: 'Pepek',
+            surname: 'Namornik',
+            avatarIcon: 'P',
+          },
         },
         {
-          idUser: 2,
-          title: 'Hrad Zvíkov',
-          date: '10.11.2015',
-          text: 'popis',
-          img: 'hrad.jpg',
-          likes: 120,
-        },
-        {
-          idUser: 3,
-          title: 'Hrad Kost',
-          date: '10.11.2015',
-          text: 'popis',
-          img: 'hrad.jpg',
+          id: 2,
+          userId: 2,
+          date: '12.12.2015',
+          text: 'popis 2',
+          img: 'hradokr.pdf',
           likes: 20,
+          title: 'Hrad Okříšky',
+          comments: [],
+          user: {
+            id: 2,
+            nickname: 'Honza',
+            firstname: 'Jan',
+            surname: 'Novák',
+            avatarIcon: 'N',
+          },
         },
         {
-          idUser: 4,
-          title: 'Rozhledna Vrbice',
-          date: '10.11.2015',
-          text: 'popis',
-          img: 'hrad.jpg',
-          likes: 202,
+          id: 3,
+          userId: 3,
+          date: '15.1.2016',
+          text: 'popis 3',
+          img: 'divadlo_bratrancu.jpg',
+          likes: 35,
+          title: 'Divadlo Bratříčkův, Plzeň',
+          comments: [],
+          user: {
+            id: 3,
+            nickname: 'Pids',
+            firstname: 'Paja',
+            surname: 'Kalašnikov',
+            avatarIcon: 'P',
+          },
+        },
+        {
+          id: 4,
+          userId: 4,
+          date: '20.2.2016',
+          text: 'popis 4',
+          img: 'Radnice1.jpg',
+          likes: 60,
+          title: 'Radnice v Olomouci',
+          comments: [],
+          user: {
+            id: 4,
+            nickname: 'Cavo',
+            firstname: 'Gajo',
+            surname: 'Dego',
+            avatarIcon: 'C',
+          },
         },
       ];
     },
     comments: () => {
       return [
         {
-          idPost: 1,
+          id: 1,
+          postId: 1,
           userId: 1,
           text: 'To je zajímavý příspěvek',
           date: '20.11.2015',
         },
         {
-          idPost: 2,
+          id: 2,
+          postId: 2,
           userId: 1,
-          text: 'To je zajímavý příspěvek',
-          date: '20.11.2015',
+          text: 'Skvělý příspěvek!',
+          date: '22.12.2015',
         },
         {
-          idPost: 3,
+          id: 3,
+          postId: 3,
           userId: 4,
-          text: 'To je zajímavý příspěvek',
-          date: '20.11.2015',
+          text: 'Velmi pěkné divadlo',
+          date: '26.1.2016',
         },
         {
-          idPost: 4,
+          id: 4,
+          postId: 4,
           userId: 3,
-          text: 'To je zajímavý příspěvek',
-          date: '20.11.2015',
+          text: 'Moc se mi tam líbilo!',
+          date: '25.2.2016',
         },
       ];
     },

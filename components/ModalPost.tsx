@@ -26,6 +26,7 @@ const StyledFab = styled(Fab)({
   margin: '0 auto',
 });
 
+// eslint-disable-next-line import/no-default-export
 export default function BasicModal() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);

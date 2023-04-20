@@ -6,6 +6,7 @@ import { forwardRef } from 'react';
 import LoginForm from '@/components/loginform';
 
 const LinkBehaviour = forwardRef(function LinkBehaviour(props, ref) {
+  // @ts-ignore
   return <NextLink ref={ref} {...props} />;
 });
 

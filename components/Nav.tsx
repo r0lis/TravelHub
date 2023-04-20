@@ -60,6 +60,7 @@ const ResponsiveAppBar: React.FC = () => {
     setAnchorElUser(null);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { user, loading } = useAuthContext();
 
   return (
@@ -220,4 +221,5 @@ const ResponsiveAppBar: React.FC = () => {
     </AppBar>
   );
 };
+// eslint-disable-next-line import/no-default-export
 export default ResponsiveAppBar;

@@ -1,8 +1,8 @@
 import AddIcon from '@mui/icons-material/Add';
-import { styled } from '@mui/material';
 import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
 import Modal from '@mui/material/Modal';
+import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 
@@ -17,6 +17,7 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+
 const StyledFab = styled(Fab)({
   position: 'absolute',
   zIndex: 1,
@@ -26,17 +27,23 @@ const StyledFab = styled(Fab)({
   margin: '0 auto',
 });
 
+// eslint-disable-next-line import/no-default-export
 export default function BasicModal() {
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <Box>
-      <StyledFab color="secondary" aria-label="add">
-        <AddIcon onClick={handleOpen} />
+      <StyledFab color="secondary" aria-label="add" onClick={handleOpen}>
+        <AddIcon />
       </StyledFab>
-
       <Modal
         open={open}
         onClose={handleClose}

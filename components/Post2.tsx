@@ -23,7 +23,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import React, { ReactNode, useState } from 'react';
 
-const GET_POSTS_QUERY = gql`
+const GET_POSTS = gql`
   query {
     posts {
       id
@@ -33,20 +33,6 @@ const GET_POSTS_QUERY = gql`
       text
       likes
       img
-      comments {
-        id
-        postId
-        userId
-        text
-        date
-      }
-      user {
-        id
-        nickname
-        firstname
-        surname
-        avatarIcon
-      }
     }
   }
 `;
@@ -56,6 +42,7 @@ interface ExpandMoreProps extends IconButtonProps {
 }
 
 const ExpandMore = styled((props: ExpandMoreProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { expand, ...other } = props;
   return <IconButton {...other} />;
 })(({ theme, expand }) => ({
@@ -77,6 +64,7 @@ interface Post {
   text: ReactNode;
   likes: number;
   img: ReactNode;
+  // eslint-disable-next-line no-use-before-define
   comments: Array<Comment>;
 }
 interface Comment {
@@ -86,37 +74,12 @@ interface Comment {
   date: ReactNode;
 }
 
-interface PostData {
-  id: string;
-  title: string;
-  text: string;
-  img: string;
-  firstname: string;
-  surname: string;
-  date: string;
-  likes: number;
-  comments: Array<{ id: string; text: string }>;
-}
-
-const style = {
-  position: 'absolute' as const,
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  height: '65vh',
-  width: '65vw',
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  p: 4,
-};
-
-interface Props {}
-
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 const Post: React.FC<Post> = (props) => {
   const [expanded, setExpanded] = useState(false);
   const [expanded2, setExpanded2] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
-  const [likess, setLikes] = useState(props.likes);
+  const [likes, setLikes] = useState(props.likes);
   const [newComment, setNewComment] = useState('');
 
   const handleExpandClick = () => {
@@ -128,7 +91,7 @@ const Post: React.FC<Post> = (props) => {
   };
   const handleLikeClick = () => {
     setIsClicked(!isClicked);
-    setLikes(isClicked ? likess - 1 : likess + 1);
+    setLikes(isClicked ? likes - 1 : likes + 1);
   };
   const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewComment(event.target.value);
@@ -145,13 +108,14 @@ const Post: React.FC<Post> = (props) => {
     setNewComment('');
   };
 
-  const { loading, error, data } = useQuery(GET_POSTS_QUERY);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { loading, error, data } = useQuery(GET_POSTS);
 
   if (loading) {
     return <p>Loading...</p>;
   }
   if (error) {
-    return <p>Error: {error.message}</p>;
+    return <p>Error :</p>;
   }
 
   return (
@@ -160,7 +124,7 @@ const Post: React.FC<Post> = (props) => {
         <CardHeader
           avatar={
             <Avatar aria-label="recipe" sx={{ bgcolor: red[500] }}>
-              {firstname}
+              {props.avatarIcon}
             </Avatar>
           }
           l
@@ -169,18 +133,18 @@ const Post: React.FC<Post> = (props) => {
               <MoreVertIcon sx={{ fontSize: 20 }} />
             </IconButton>
           }
-          title={`${img} ${surname}`}
-          subheader={date}
+          title={`${props.firstname} ${props.surname}`}
+          subheader={props.date}
         />
         <CardMedia
           component="img"
           height="auto"
-          image={`./img/${img}`}
+          image={`./img/${props.img}`}
           alt="Zamek pce"
         />
         <CardContent>
           <Typography sx={{ color: '#FFFFF', fontSize: 22 }}>
-            {title}
+            {props.title}
           </Typography>
         </CardContent>
         <hr style={{ border: '1px solid #ccc' }} />
@@ -218,7 +182,7 @@ const Post: React.FC<Post> = (props) => {
         <Collapse in={expanded2} timeout="auto" unmountOnExit>
           <CardContent>
             <List>
-              {comments.map((comment) => (
+              {props.comments.map((comment) => (
                 <ListItem key={comment.id}>
                   <ListItemText primary={comment.text} />
                 </ListItem>
@@ -258,7 +222,7 @@ const Post: React.FC<Post> = (props) => {
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
             <Typography paragraph>Popis:</Typography>
-            <Typography paragraph>{text}</Typography>
+            <Typography paragraph>{props.text}</Typography>
             <Typography paragraph>{props.text}</Typography>
             <Typography paragraph>{props.text}</Typography>
             <Typography>{props.text}</Typography>

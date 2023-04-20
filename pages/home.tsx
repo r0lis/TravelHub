@@ -1,14 +1,14 @@
 import { createTheme, ThemeProvider } from '@mui/material';
 import BotNav from 'components/BotNav';
-import NavBar from 'components/Nav';
 import NextLink from 'next/link';
 import * as React from 'react';
 import { forwardRef } from 'react';
 
+import NavBar from '@/components/Nav';
 import Posts from '@/components/Posts';
-import { usePeopleQuery } from '@/generated/graphql';
 
 const LinkBehaviour = forwardRef(function LinkBehaviour(props, ref) {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   return <NextLink ref={ref} {...props} />;
 });
@@ -29,6 +29,7 @@ const theme = createTheme({
 
     MuiLink: {
       defaultProps: {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         component: LinkBehaviour,
       },
@@ -48,7 +49,6 @@ const theme = createTheme({
 });
 
 const Home = () => {
-  const { data, loading, error } = usePeopleQuery();
   return (
     <ThemeProvider theme={theme}>
       <>

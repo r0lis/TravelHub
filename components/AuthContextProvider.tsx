@@ -17,6 +17,7 @@ export const AuthContextProvider: FC<PropsWithChildren> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);

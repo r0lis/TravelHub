@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 import { Container } from '@mui/system';
-import Post from 'components/Post';
+import Post from 'components/Post2';
 import * as React from 'react';
 
 import { UserPosts } from '../types';
