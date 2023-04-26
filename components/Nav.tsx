@@ -14,7 +14,6 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 import * as React from 'react';
-
 import { useAuthContext } from './AuthContextProvider';
 
 interface Pages {
