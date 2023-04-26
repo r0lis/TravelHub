@@ -59,6 +59,7 @@ const Login: React.FC = () => {
         height: '70%',
       }}
     >
+      
       <Container
         sx={{
           borderRadius: '15px',
@@ -70,6 +71,8 @@ const Login: React.FC = () => {
           maxWidth: '100%',
         }}
       >
+        
+        
         <Grid
           container
           direction="row"
@@ -77,7 +80,13 @@ const Login: React.FC = () => {
           alignItems="center"
           style={{ minHeight: '80vh' }}
         >
+          
           <Grid item xs={6}>
+            <Box sx={{paddingBottom:'20px'}}>
+          <Typography variant="h3" align="center" >
+              Travel Hub
+            </Typography>
+            </Box>
             <Paper
               elevation={1}
               sx={{ padding: 5, marginRight: '30px', marginLeft: '50px' }}

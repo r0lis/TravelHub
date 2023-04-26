@@ -54,7 +54,36 @@ const typeDefs = gql`
     ): Post
   }
 `;
-const posts = [];
+const posts: Post[] = [];
+
+interface User {
+  id: number;
+  nickname: string;
+  firstname: string;
+  surname: string;
+  avatarIcon: string;
+}
+
+interface Post {
+  id: number;
+  userId: number;
+  date: string;
+  title: string;
+  text: string;
+  likes: number;
+  img: string;
+  comments: Comment[];
+  user: User;
+}
+
+interface Comment {
+  id: number;
+  postId: number;
+  userId: number;
+  text: string;
+  date: string;
+}
+
 const resolvers = {
   Mutation: {
     createPost: (
@@ -74,7 +103,7 @@ const resolvers = {
         likes: number;
         img: string;
       },
-    ): any => {
+    ): Post => {
       // Create a new post and return it as a response to the mutation
       const newPost = {
         id: posts.length + 1,
@@ -85,6 +114,13 @@ const resolvers = {
         likes,
         img,
         comments: [],
+        user: {
+          id: userId,
+          nickname: 'Jouda',
+          firstname: 'Pepek',
+          surname: 'Namornik',
+          avatarIcon: 'P',
+        },
       };
       posts.push(newPost);
       return newPost;
@@ -92,7 +128,7 @@ const resolvers = {
   },
 
   Query: {
-    users: (content: Context) => {
+    users: (): User[] => {
       return [
         {
           id: 1,
@@ -126,106 +162,106 @@ const resolvers = {
     },
     posts: () => {
       return [
-        {
-          id: 1,
-          userId: 1,
-          date: '10.11.2015',
-          text: 'popis',
-          img: 'Zamek_pce_2.jpg',
-          likes: 50,
-          title: 'Zámek Pardubice',
-          comments: [],
-          user: {
-            id: 1,
-            nickname: 'Jouda',
-            firstname: 'Pepek',
-            surname: 'Namornik',
-            avatarIcon: 'P',
-          },
-        },
-        {
-          id: 2,
-          userId: 2,
-          date: '12.12.2015',
-          text: 'popis 2',
-          img: 'hradokr.pdf',
-          likes: 20,
-          title: 'Hrad Okříšky',
-          comments: [],
-          user: {
-            id: 2,
-            nickname: 'Honza',
-            firstname: 'Jan',
-            surname: 'Novák',
-            avatarIcon: 'N',
-          },
-        },
-        {
-          id: 3,
-          userId: 3,
-          date: '15.1.2016',
-          text: 'popis 3',
-          img: 'divadlo_bratrancu.jpg',
-          likes: 35,
-          title: 'Divadlo Bratříčkův, Plzeň',
-          comments: [],
-          user: {
-            id: 3,
-            nickname: 'Pids',
-            firstname: 'Paja',
-            surname: 'Kalašnikov',
-            avatarIcon: 'P',
-          },
-        },
-        {
-          id: 4,
-          userId: 4,
-          date: '20.2.2016',
-          text: 'popis 4',
-          img: 'Radnice1.jpg',
-          likes: 60,
-          title: 'Radnice v Olomouci',
-          comments: [],
-          user: {
-            id: 4,
-            nickname: 'Cavo',
-            firstname: 'Gajo',
-            surname: 'Dego',
-            avatarIcon: 'C',
-          },
-        },
+      {
+      id: 1,
+      userId: 1,
+      date: '10.11.2015',
+      text: 'popis',
+      img: 'Zamek_pce_2.jpg',
+      likes: 50,
+      title: 'Zámek Pardubice',
+      comments: [],
+      user: {
+      id: 1,
+      nickname: 'Jouda',
+      firstname: 'Pepek',
+      surname: 'Namornik',
+      avatarIcon: 'P',
+      },
+      },
+      {
+      id: 2,
+      userId: 2,
+      date: '12.12.2015',
+      text: 'popis 2',
+      img: 'hradokr.pdf',
+      likes: 20,
+      title: 'Hrad Okříšky',
+      comments: [],
+      user: {
+      id: 2,
+      nickname: 'Honza',
+      firstname: 'Jan',
+      surname: 'Novák',
+      avatarIcon: 'N',
+      },
+      },
+      {
+      id: 3,
+      userId: 3,
+      date: '15.1.2016',
+      text: 'popis 3',
+      img: 'divadlo_bratrancu.jpg',
+      likes: 35,
+      title: 'Divadlo Bratříčkův, Plzeň',
+      comments: [],
+      user: {
+      id: 3,
+      nickname: 'Pids',
+      firstname: 'Paja',
+      surname: 'Kalašnikov',
+      avatarIcon: 'P',
+      },
+      },
+      {
+      id: 4,
+      userId: 4,
+      date: '20.2.2016',
+      text: 'popis 4',
+      img: 'Radnice1.jpg',
+      likes: 60,
+      title: 'Radnice v Olomouci',
+      comments: [],
+      user: {
+      id: 4,
+      nickname: 'Cavo',
+      firstname: 'Gajo',
+      surname: 'Dego',
+      avatarIcon: 'C',
+      },
+      },
       ];
-    },
-    comments: () => {
+      },
+      comments: () => {
       return [
-        {
-          id: 1,
-          postId: 1,
-          userId: 1,
-          text: 'To je zajímavý příspěvek',
-          date: '20.11.2015',
-        },
-        {
-          id: 2,
-          postId: 2,
-          userId: 1,
-          text: 'Skvělý příspěvek!',
-          date: '22.12.2015',
-        },
-        {
-          id: 3,
-          postId: 3,
-          userId: 4,
-          text: 'Velmi pěkné divadlo',
-          date: '26.1.2016',
-        },
-        {
-          id: 4,
-          postId: 4,
-          userId: 3,
-          text: 'Moc se mi tam líbilo!',
-          date: '25.2.2016',
-        },
+      {
+      id: 1,
+      postId: 1,
+      userId: 1,
+      text: 'To je zajímavý příspěvek',
+      date: '20.11.2015',
+      },
+      {
+      id: 2,
+      postId: 2,
+      userId: 1,
+      text: 'Skvělý příspěvek!',
+      date: '22.12.2015',
+      },
+      {
+      id: 3,
+      postId: 3,
+      userId: 2,
+      text: 'Díky, líbilo se mi to!',
+      date: '16.1.2016',
+      },
+      {
+      id: 4,
+      postId: 4,
+      userId: 3,
+      text: 'Velmi pěkná fotka',
+      date: '25.2.2016',
+      },
       ];
     },
   },

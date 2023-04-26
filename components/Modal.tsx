@@ -2,8 +2,9 @@ import AddIcon from '@mui/icons-material/Add';
 import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
 import Modal from '@mui/material/Modal';
-import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles';
+
 import * as React from 'react';
 
 const style = {
