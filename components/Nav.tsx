@@ -14,6 +14,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 import * as React from 'react';
+
 import { useAuthContext } from './AuthContextProvider';
 
 interface Pages {
@@ -36,7 +37,7 @@ const settings: Array<Setting> = [
   { label: 'Logout', href: '/login' },
 ];
 
-const ResponsiveAppBar: React.FC = () => {
+export const ResponsiveAppBar: React.FC = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null,
   );
@@ -63,7 +64,7 @@ const ResponsiveAppBar: React.FC = () => {
   const { user, loading } = useAuthContext();
 
   return (
-    <AppBar sx={{ width: '100', margin: '0', padding: '0' }} position="static">
+    <ppBar sx={{ width: '100', margin: '0', padding: '0' }} position="static">
       <Container>
         <Toolbar disableGutters>
           <Typography

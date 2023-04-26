@@ -14,6 +14,7 @@ const posts: Array<UserPosts> = [
     surname: 'Namornik',
     avatarIcon: 'J',
     title: 'Zámek Pardubice',
+    // eslint-disable-next-line sonarjs/no-duplicate-string
     date: '10.11.2015',
     text: 'popis',
     img: 'Zamek_pce_2.jpg',
@@ -23,12 +24,14 @@ const posts: Array<UserPosts> = [
         id: 1,
         userId: 2,
         text: 'To je zajímavý příspěvek',
+        // eslint-disable-next-line sonarjs/no-duplicate-string
         date: '20.11.2015',
       },
       {
         id: 2,
         userId: 3,
         text: 'Souhlasím',
+        // eslint-disable-next-line sonarjs/no-duplicate-string
         date: '11.01.2015',
       },
     ],
@@ -129,4 +132,5 @@ const RowAndColumnSpacing: React.FC = () => {
   );
 };
 
+// eslint-disable-next-line import/no-default-export
 export default RowAndColumnSpacing;

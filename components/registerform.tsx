@@ -1,3 +1,5 @@
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable @next/next/no-img-element */
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import {
@@ -137,4 +139,5 @@ const Register: React.FC = () => {
   );
 };
 
+// eslint-disable-next-line import/no-default-export
 export default Register;
