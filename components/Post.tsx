@@ -38,7 +38,6 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
     duration: theme.transitions.duration.shortest,
   }),
 }));
-
 interface Post {
   id: number;
   nickname: string;
@@ -50,9 +49,16 @@ interface Post {
   text: string;
   likes: number;
   img: ReactNode;
-  // eslint-disable-next-line no-use-before-define
   comments: Array<Comment>;
+  user: {
+    id: number;
+    nickname: string;
+    firstname: string;
+    surname: string;
+    avatarIcon: string;
+  };
 }
+
 interface Comment {
   id: number;
   userId: number;
@@ -100,7 +106,7 @@ const Post: React.FC<Post> = (props) => {
         <CardHeader
           avatar={
             <Avatar aria-label="recipe" sx={{ bgcolor: red[500] }}>
-              {props.avatarIcon}
+              {props.user.avatarIcon}
             </Avatar>
           }
           l
@@ -109,14 +115,14 @@ const Post: React.FC<Post> = (props) => {
               <MoreVertIcon sx={{ fontSize: 20 }} />
             </IconButton>
           }
-          title={props.firstname} 
+          title={`${props.user.firstname} ${props.user.surname}`}
           subheader={props.date}
         />
         <CardMedia
           component="img"
           height="auto"
           image={`./img/${props.img}`}
-          alt="Zamek pce"
+          
         />
         <CardContent>
           <Typography sx={{ color: '#FFFFF', fontSize: 22 }}>
@@ -158,11 +164,12 @@ const Post: React.FC<Post> = (props) => {
         <Collapse in={expanded2} timeout="auto" unmountOnExit>
           <CardContent>
             <List>
-              {props.comments.map((comment) => (
-                <ListItem key={comment.id}>
-                  <ListItemText primary={comment.text} />
+              {props.comments.map((comments) => (
+                <ListItem key={comments.id}>
+                  <ListItemText primary={comments.text} />
                 </ListItem>
               ))}
+              
             </List>
 
             <Box

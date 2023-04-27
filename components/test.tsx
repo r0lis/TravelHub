@@ -34,8 +34,8 @@ function PostsList() {
     return (
       <div>
         {data?.posts.map((post: any) => (
-          <div key={post.id}>
-            <h2>{post.user.surname}</h2>
+          <div key={post.user.id}>
+            <h2>{post.comments.text}</h2>
           </div>
         ))}
       </div>
