@@ -66,86 +66,20 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-interface Post {
-  id: number;
-  nickname: ReactNode;
-  firstname: ReactNode;
-  surname: ReactNode;
-  avatarIcon: ReactNode;
-  date: ReactNode;
-  title: ReactNode;
-  text: ReactNode;
-  likes: number;
-  img: ReactNode;
-  comments: Array<Comment>;
-}
-interface Comment {
-  id: number;
-  userId: number;
-  text: ReactNode;
-  date: ReactNode;
-}
 
-interface PostData {
-  id: string;
-  title: string;
-  text: string;
-  img: string;
-  firstname: string;
-  surname: string;
-  date: string;
-  likes: number;
-  comments: Array<{ id: string; text: string }>;
-}
 
-const style = {
-  position: 'absolute' as const,
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  height: '65vh',
-  width: '65vw',
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  p: 4,
-};
 
-interface Props {}
-
-const Post: React.FC<Post> = (props) => {
+const Post: React.FC<Post> = () => {
   const [expanded, setExpanded] = useState(false);
   const [expanded2, setExpanded2] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
-  const [likess, setLikes] = useState(props.likes);
+  const [likess, setLikes] = useState(likes);
   const [newComment, setNewComment] = useState('');
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
+ 
 
-  const handleExpandClick2 = () => {
-    setExpanded2(!expanded2);
-  };
-  const handleLikeClick = () => {
-    setIsClicked(!isClicked);
-    setLikes(isClicked ? likess - 1 : likess + 1);
-  };
-  const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewComment(event.target.value);
-  };
-
-  const handleCommentSubmit = () => {
-    const newCommentObject = {
-      id: props.comments.length + 1,
-      text: newComment,
-      date: Date.now(),
-      userId: props.comments.length + 1,
-    };
-    props.comments.push(newCommentObject);
-    setNewComment('');
-  };
-
-  const { loading, error, data } = useQuery(GET_POSTS_QUERY);
+  const { loading, error } = useQuery(GET_POSTS_QUERY);
+  const {data} = useQuery(GET_POSTS_QUERY);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -155,12 +89,13 @@ const Post: React.FC<Post> = (props) => {
   }
 
   return (
+  
     <Box>
       <Card sx={{ borderRadius: '10px' }}>
         <CardHeader
           avatar={
             <Avatar aria-label="recipe" sx={{ bgcolor: red[500] }}>
-              {firstname}
+              {user.firstname}
             </Avatar>
           }
           l
@@ -259,9 +194,9 @@ const Post: React.FC<Post> = (props) => {
           <CardContent>
             <Typography paragraph>Popis:</Typography>
             <Typography paragraph>{text}</Typography>
-            <Typography paragraph>{props.text}</Typography>
-            <Typography paragraph>{props.text}</Typography>
-            <Typography>{props.text}</Typography>
+            <Typography paragraph>{text}</Typography>
+            <Typography paragraph>{text}</Typography>
+            <Typography>{text}</Typography>
           </CardContent>
         </Collapse>
       </Card>

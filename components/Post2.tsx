@@ -23,7 +23,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import React, { ReactNode, useState } from 'react';
 
-const GET_POSTS = gql`
+const GET_POSTS_QUERY = gql`
   query {
     posts {
       id
@@ -33,6 +33,20 @@ const GET_POSTS = gql`
       text
       likes
       img
+      comments {
+        id
+        postId
+        userId
+        text
+        date
+      }
+      user {
+        id
+        nickname
+        firstname
+        surname
+        avatarIcon
+      }
     }
   }
 `;
@@ -109,7 +123,8 @@ const Post: React.FC<Post> = (props) => {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { loading, error, data } = useQuery(GET_POSTS);
+  const { loading, error } = useQuery(GET_POSTS_QUERY);
+  const {data} = useQuery(GET_POSTS_QUERY);
 
   if (loading) {
     return <p>Loading...</p>;

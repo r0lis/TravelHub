@@ -1,13 +1,9 @@
-
 import { ThemeProvider } from '@emotion/react';
-import { Container, createTheme } from '@mui/material';
+import { createTheme } from '@mui/material';
 import NextLink from 'next/link';
 import { forwardRef } from 'react';
-import Pokus from '@/components/pokus';
-import LoginForm from '@/components/loginform';
-import { ApolloProvider } from '@apollo/client';
-import { client } from '@/lib/apolloClient';
-import { PostQueryData, POST_QUERY } from '@/queries/demo.graphql';
+
+import Test from '@/components/test';
 
 const LinkBehaviour = forwardRef(function LinkBehaviour(props, ref) {
   // @ts-ignore
@@ -45,29 +41,11 @@ const theme = createTheme({
   },
 });
 
-const Login = () => {
-  const postId = 1;
-  const { loading, error, data } = useQuery<PostQueryData>(POST_QUERY, {
-    variables: {
-      postId,
-    },
-  });
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-  if (error) {
-    console.error(error);
-    return <p>Error :(</p>;
-  }
-
-  const post = data?.post;
-
+const Test2 = () => {
   return (
-    <ApolloProvider client={client}>
-      <Pokus postId={postId} />
-    </ApolloProvider>
+    <ThemeProvider theme={theme}>
+      <Test />
+    </ThemeProvider>
   );
 };
-
-export default Login;
+export default Test2;

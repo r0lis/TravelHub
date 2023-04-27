@@ -6,6 +6,7 @@ import { getApolloClient } from '../utility/apollo-client';
 import createEmotionCache from '../utility/createEmotionCache';
 
 export default class MyDocument extends Document {
+  // eslint-disable-next-line class-methods-use-this
   render() {
     return (
       <Html lang="en">
@@ -56,13 +57,11 @@ MyDocument.getInitialProps = async (ctx) => {
   const cache = createEmotionCache();
   const { extractCriticalToChunks } = createEmotionServer(cache);
 
-  /* eslint-disable */
   ctx.renderPage = () =>
     originalRenderPage({
       enhanceApp: (App: any) => (props) =>
         <App emotionCache={cache} {...props} />,
     });
-  /* eslint-enable */
 
   const initialProps = await Document.getInitialProps(ctx);
   const apolloClient = getApolloClient({ forceNew: true });

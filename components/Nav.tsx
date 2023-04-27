@@ -1,24 +1,16 @@
-/* @ts-ignore */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
-import MenuIcon from '@mui/icons-material/Menu';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import AppBar from '@mui/material/AppBar';
-import Avatar from '@mui/material/Avatar';
-import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import Image from 'next/image';
+import MenuIcon from '@mui/icons-material/Menu';
 import * as React from 'react';
-
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useAuthContext } from './AuthContextProvider';
+import AppBar from '@mui/material/AppBar';
+import Container from '@mui/material/Container';
+import { Toolbar, IconButton, MenuItem, Button, Badge, Avatar } from '@mui/material';
+import { title } from 'process';
 
 interface Pages {
   label: string;
@@ -66,7 +58,8 @@ export const ResponsiveAppBar: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { user, loading } = useAuthContext();
 
-  return (
+  
+  return( 
     <AppBar sx={{ width: '100', margin: '0', padding: '0' }} position="static">
       <Container>
         <Toolbar disableGutters>
@@ -222,7 +215,10 @@ export const ResponsiveAppBar: React.FC = () => {
         </Toolbar>
       </Container>
     </AppBar>
+  
   );
+  
+              
 };
 // eslint-disable-next-line import/no-default-export
 export default ResponsiveAppBar;

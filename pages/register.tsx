@@ -6,6 +6,7 @@ import { forwardRef } from 'react';
 import RegisterForm from '@/components/registerform';
 
 const LinkBehaviour = forwardRef(function LinkBehaviour(props, ref) {
+  // @ts-ignore
   return <NextLink ref={ref} {...props} />;
 });
 

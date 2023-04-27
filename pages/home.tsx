@@ -4,6 +4,7 @@ import NextLink from 'next/link';
 import * as React from 'react';
 import { forwardRef } from 'react';
 
+// eslint-disable-next-line import/no-named-as-default
 import NavBar from '@/components/Nav';
 import Posts from '@/components/Posts';
 
