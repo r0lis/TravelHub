@@ -6,6 +6,7 @@ import { forwardRef } from 'react';
 import RegisterForm from '@/components/registerform';
 
 const LinkBehaviour = forwardRef(function LinkBehaviour(props, ref) {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   return <NextLink ref={ref} {...props} />;
 });
@@ -21,6 +22,7 @@ const theme = createTheme({
   components: {
     MuiLink: {
       defaultProps: {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         component: LinkBehaviour,
       },

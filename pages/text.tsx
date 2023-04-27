@@ -1,3 +1,5 @@
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { ThemeProvider } from '@emotion/react';
 import { createTheme } from '@mui/material';
 import NextLink from 'next/link';
