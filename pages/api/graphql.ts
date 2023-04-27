@@ -1,3 +1,4 @@
+import { firestore } from 'firebase-admin';
 import { DecodedIdToken } from 'firebase-admin/lib/auth/token-verifier';
 import { gql } from 'graphql-tag';
 import { createSchema, createYoga } from 'graphql-yoga';
@@ -6,6 +7,13 @@ import { verifyToken } from '@/server/verifyToken';
 
 type Context = {
   user?: DecodedIdToken | undefined;
+};
+
+type DbUser = {
+  date: Date;
+  likes: number;
+  title: string;
+  userId: number;
 };
 
 const typeDefs = gql`
@@ -86,6 +94,9 @@ interface Comment {
   date: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const db = firestore();
+
 const resolvers = {
   Mutation: {
     createPost: (
@@ -130,7 +141,17 @@ const resolvers = {
   },
 
   Query: {
-    users: () => {
+    users: async () => {
+      const usersRef = db.collection(
+        'Post',
+      ) as FirebaseFirestore.CollectionReference<DbUser>;
+      const docsRefs = await usersRef.listDocuments();
+      const docsSnapshotPromises = docsRefs.map((doc) => doc.get());
+      const docsSnapshots = await Promise.all(docsSnapshotPromises);
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const docs = docsSnapshots.map((doc) => doc.data()!);
+      console.log(docs);
+
       return [
         {
           id: 1,
