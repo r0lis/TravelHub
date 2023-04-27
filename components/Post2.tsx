@@ -1,4 +1,4 @@
-import { gql, useQuery } from '@apollo/client';
+
 import CommentIcon from '@mui/icons-material/Comment';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -23,33 +23,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import React, { ReactNode, useState } from 'react';
 
-const GET_POSTS_QUERY = gql`
-  query {
-    posts {
-      id
-      userId
-      date
-      title
-      text
-      likes
-      img
-      comments {
-        id
-        postId
-        userId
-        text
-        date
-      }
-      user {
-        id
-        nickname
-        firstname
-        surname
-        avatarIcon
-      }
-    }
-  }
-`;
+
 
 interface ExpandMoreProps extends IconButtonProps {
   expand?: boolean;
@@ -122,16 +96,7 @@ const Post: React.FC<Post> = (props) => {
     setNewComment('');
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { loading, error } = useQuery(GET_POSTS_QUERY);
-  const {data} = useQuery(GET_POSTS_QUERY);
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-  if (error) {
-    return <p>Error :</p>;
-  }
 
   return (
     <Box>

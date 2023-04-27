@@ -1,10 +1,17 @@
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
+
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]?: Maybe<T[SubKey]>;
+};
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]: Maybe<T[SubKey]>;
+};
 const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -25,6 +32,7 @@ export type GithubUser = {
 export type Query = {
   __typename?: 'Query';
   githubUsers: Array<GithubUser>;
+  // eslint-disable-next-line no-use-before-define
   users: Array<User>;
 };
 
@@ -33,22 +41,24 @@ export type User = {
   name?: Maybe<Scalars['String']>;
 };
 
-export type PeopleQueryVariables = Exact<{ [key: string]: never; }>;
+export type PeopleQueryVariables = Exact<{ [key: string]: never }>;
 
-
-export type PeopleQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', name?: string | null }>, githubUsers: Array<{ __typename?: 'GithubUser', login: string }> };
-
+export type PeopleQuery = {
+  __typename?: 'Query';
+  users: Array<{ __typename?: 'User'; name?: string | null }>;
+  githubUsers: Array<{ __typename?: 'GithubUser'; login: string }>;
+};
 
 export const PeopleDocument = gql`
-    query People {
-  users {
-    name
+  query People {
+    users {
+      name
+    }
+    githubUsers {
+      login
+    }
   }
-  githubUsers {
-    login
-  }
-}
-    `;
+`;
 
 /**
  * __usePeopleQuery__
@@ -65,14 +75,27 @@ export const PeopleDocument = gql`
  *   },
  * });
  */
-export function usePeopleQuery(baseOptions?: Apollo.QueryHookOptions<PeopleQuery, PeopleQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<PeopleQuery, PeopleQueryVariables>(PeopleDocument, options);
-      }
-export function usePeopleLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PeopleQuery, PeopleQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<PeopleQuery, PeopleQueryVariables>(PeopleDocument, options);
-        }
+export function usePeopleQuery(
+  baseOptions?: Apollo.QueryHookOptions<PeopleQuery, PeopleQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<PeopleQuery, PeopleQueryVariables>(
+    PeopleDocument,
+    options,
+  );
+}
+export function usePeopleLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<PeopleQuery, PeopleQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<PeopleQuery, PeopleQueryVariables>(
+    PeopleDocument,
+    options,
+  );
+}
 export type PeopleQueryHookResult = ReturnType<typeof usePeopleQuery>;
 export type PeopleLazyQueryHookResult = ReturnType<typeof usePeopleLazyQuery>;
-export type PeopleQueryResult = Apollo.QueryResult<PeopleQuery, PeopleQueryVariables>;
+export type PeopleQueryResult = Apollo.QueryResult<
+  PeopleQuery,
+  PeopleQueryVariables
+>;

@@ -23,39 +23,12 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import React, { ReactNode, useState } from 'react';
 
-const GET_POSTS_QUERY = gql`
-  query {
-    posts {
-      id
-      userId
-      date
-      title
-      text
-      likes
-      img
-      comments {
-        id
-        postId
-        userId
-        text
-        date
-      }
-      user {
-        id
-        nickname
-        firstname
-        surname
-        avatarIcon
-      }
-    }
-  }
-`;
-
 interface ExpandMoreProps extends IconButtonProps {
   expand?: boolean;
 }
 
 const ExpandMore = styled((props: ExpandMoreProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { expand, ...other } = props;
   return <IconButton {...other} />;
 })(({ theme, expand }) => ({
@@ -66,36 +39,68 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
+interface Post {
+  id: number;
+  nickname: string;
+  firstname: string;
+  surname: string;
+  avatarIcon: string;
+  date: ReactNode;
+  title: string;
+  text: string;
+  likes: number;
+  img: ReactNode;
+  // eslint-disable-next-line no-use-before-define
+  comments: Array<Comment>;
+}
+interface Comment {
+  id: number;
+  userId: number;
+  text: ReactNode;
+  date: ReactNode;
+}
 
-
-
-const Post: React.FC<Post> = () => {
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+const Post: React.FC<Post> = (props) => {
   const [expanded, setExpanded] = useState(false);
   const [expanded2, setExpanded2] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
-  const [likess, setLikes] = useState(likes);
+  const [likes, setLikes] = useState(props.likes);
   const [newComment, setNewComment] = useState('');
 
- 
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
 
-  const { loading, error } = useQuery(GET_POSTS_QUERY);
-  const {data} = useQuery(GET_POSTS_QUERY);
+  const handleExpandClick2 = () => {
+    setExpanded2(!expanded2);
+  };
+  const handleLikeClick = () => {
+    setIsClicked(!isClicked);
+    setLikes(isClicked ? likes - 1 : likes + 1);
+  };
+  const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewComment(event.target.value);
+  };
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-  if (error) {
-    return <p>Error: {error.message}</p>;
-  }
+  const handleCommentSubmit = () => {
+    const newCommentObject = {
+      id: props.comments.length + 1,
+      text: newComment,
+      date: Date.now(),
+      userId: props.comments.length + 1,
+    };
+    props.comments.push(newCommentObject);
+    setNewComment('');
+  };
 
   return (
-  
     <Box>
       <Card sx={{ borderRadius: '10px' }}>
         <CardHeader
           avatar={
             <Avatar aria-label="recipe" sx={{ bgcolor: red[500] }}>
-              {user.firstname}
+              {props.avatarIcon}
             </Avatar>
           }
           l
@@ -104,18 +109,18 @@ const Post: React.FC<Post> = () => {
               <MoreVertIcon sx={{ fontSize: 20 }} />
             </IconButton>
           }
-          title={`${img} ${surname}`}
-          subheader={date}
+          title={props.firstname} 
+          subheader={props.date}
         />
         <CardMedia
           component="img"
           height="auto"
-          image={`./img/${img}`}
+          image={`./img/${props.img}`}
           alt="Zamek pce"
         />
         <CardContent>
           <Typography sx={{ color: '#FFFFF', fontSize: 22 }}>
-            {title}
+            {props.title}
           </Typography>
         </CardContent>
         <hr style={{ border: '1px solid #ccc' }} />
@@ -153,7 +158,7 @@ const Post: React.FC<Post> = () => {
         <Collapse in={expanded2} timeout="auto" unmountOnExit>
           <CardContent>
             <List>
-              {comments.map((comment) => (
+              {props.comments.map((comment) => (
                 <ListItem key={comment.id}>
                   <ListItemText primary={comment.text} />
                 </ListItem>
@@ -193,10 +198,10 @@ const Post: React.FC<Post> = () => {
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
             <Typography paragraph>Popis:</Typography>
-            <Typography paragraph>{text}</Typography>
-            <Typography paragraph>{text}</Typography>
-            <Typography paragraph>{text}</Typography>
-            <Typography>{text}</Typography>
+            <Typography paragraph>{props.text}</Typography>
+            <Typography paragraph>{props.text}</Typography>
+            <Typography paragraph>{props.text}</Typography>
+            <Typography>{props.text}</Typography>
           </CardContent>
         </Collapse>
       </Card>
