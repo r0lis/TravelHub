@@ -1,18 +1,13 @@
 import { ThemeOptions } from '@mui/material/styles';
-import NextLink from 'next/link';
-import { forwardRef } from 'react';
-
-
 
 const lightThemeOptions: ThemeOptions = {
   palette: {
     mode: 'light',
-    background:{
-      paper:'#FFFFFF'
-    }
-   
-    
+    background: {
+      paper: '#FFFFFF',
+    },
   },
 };
 
+// eslint-disable-next-line import/no-default-export
 export default lightThemeOptions;

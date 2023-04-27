@@ -222,7 +222,7 @@ const resolvers = {
           text: 'popis 4',
           img: 'rozhledna-vrbice1.jpg',
           likes: 60,
-          title: 'Rozhledna Vrbice',
+          title: 'Rozhledna gajo',
           comments: [],
           user: {
             id: 4,

@@ -1,20 +1,30 @@
-import { authUtils } from '@/firebase/auth.utils';
-import { ApolloClient, ApolloLink, HttpLink, InMemoryCache } from '@apollo/client';
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import {
+  ApolloClient,
+  ApolloLink,
+  HttpLink,
+  InMemoryCache,
+} from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
-import { setContext } from "@apollo/client/link/context";
+
+import { authUtils } from '@/firebase/auth.utils';
 // import { auth } from '../components/userContext';
 const isServer = typeof window === 'undefined';
 // source: https://github.com/shshaw/next-apollo-ssr
 // @ts-ignore
+// eslint-disable-next-line no-underscore-dangle
 const windowApolloState = !isServer && window.__NEXT_DATA__.apolloState;
 let CLIENT: ApolloClient<any>;
 const endpoint = '/api/graphql';
 const oAuthLink = () =>
-  //@ts-ignore
+  // @ts-ignore
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setContext(async ({ operationName }, { headers }) => {
     const user = authUtils.getCurrentUser() || null;
     const jwtToken = user ? await user.getIdToken() : null;
-    console.log("USER",user);
+    console.log('USER', user);
     return {
       headers: {
         ...headers,
@@ -22,7 +32,7 @@ const oAuthLink = () =>
       },
     };
   });
-  
+
 const logoutLink = (logout: VoidFunction) =>
   onError(({ graphQLErrors, networkError }) => {
     if (networkError) {
@@ -42,6 +52,7 @@ const httpLink = (): HttpLink => {
   if (typeof window === 'undefined') {
     return new HttpLink({
       uri: endpoint,
+      // eslint-disable-next-line sonarjs/no-duplicate-string
       credentials: 'same-origin',
       headers: {},
     });
@@ -65,14 +76,19 @@ type ApolloClientProps =
     };
 export function getApolloClient(parameters: ApolloClientProps) {
   const forceNew = parameters?.forceNew;
-  const logout = !parameters.forceNew ? parameters.logout : undefined;
+  const logout = parameters.forceNew ? undefined : parameters.logout;
   if (!CLIENT || forceNew) {
     CLIENT = new ApolloClient({
       ssrMode: isServer,
       uri: endpoint,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       cache: new InMemoryCache().restore(windowApolloState || {}),
       credentials: 'same-origin',
-      link: ApolloLink.from(isServer || !logout ? [oAuthLink(), httpLink()] : [oAuthLink(), logoutLink(logout), httpLink()]),
+      link: ApolloLink.from(
+        isServer || !logout
+          ? [oAuthLink(), httpLink()]
+          : [oAuthLink(), logoutLink(logout), httpLink()],
+      ),
       /**
         // Default options to disable SSR for all queries.
         defaultOptions: {
