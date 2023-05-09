@@ -10,27 +10,21 @@ import { UserPosts } from '../types';
 const GET_POSTS_QUERY = gql`
   query {
     posts {
-      id
-      userId
       date
-      title
-      text
-      likes
+      id
       img
-      comments {
-        id
-        postId
-        userId
-        text
-        date
-      }
-      user {
+      likes
+      text
+      title
+      userId
+     
+        avatarIcon
+        firstname
         id
         nickname
-        firstname
         surname
-        avatarIcon
-      }
+        
+      
     }
   }
 `;

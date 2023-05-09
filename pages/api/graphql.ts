@@ -18,9 +18,9 @@ type DbUser = {
 
 const typeDefs = gql`
   type Query {
-    users: [User!]!
+    
     posts: [Post!]!
-    comments: [Comment!]!
+    
   }
 
   type User {
@@ -32,6 +32,10 @@ const typeDefs = gql`
   }
 
   type Post {
+    nickname: String
+    firstname: String
+    surname: String
+    avatarIcon: String
     id: Int
     userId: Int
     date: String
@@ -39,17 +43,11 @@ const typeDefs = gql`
     text: String
     likes: Int
     img: String
-    comments: [Comment!]!
-    user: User!
+   
+   
   }
 
-  type Comment {
-    id: Int
-    postId: Int
-    userId: Int
-    text: String
-    date: String
-  }
+  
 
   type Mutation {
     createPost(
@@ -82,17 +80,11 @@ interface Post {
   likes: number;
   img: string;
   // eslint-disable-next-line no-use-before-define
-  comments: Array<Comment>;
+  
   user: User;
 }
 
-interface Comment {
-  id: number;
-  postId: number;
-  userId: number;
-  text: string;
-  date: string;
-}
+
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const db = firestore();
@@ -126,7 +118,7 @@ const resolvers = {
         text,
         likes,
         img,
-        comments: [],
+       
         user: {
           id: userId,
           nickname: 'Jouda',
@@ -141,7 +133,8 @@ const resolvers = {
   },
 
   Query: {
-    users: async () => {
+    
+    posts: async () => {
       const usersRef = db.collection(
         'Post',
       ) as FirebaseFirestore.CollectionReference<DbUser>;
@@ -149,41 +142,10 @@ const resolvers = {
       const docsSnapshotPromises = docsRefs.map((doc) => doc.get());
       const docsSnapshots = await Promise.all(docsSnapshotPromises);
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const docs = docsSnapshots.map((doc) => doc.data()!);
-      console.log(docs);
+      const dbdocs = docsSnapshots.map((doc) => doc.data()!);
+      console.log(dbdocs);
 
-      return [
-        {
-          id: 1,
-          nickname: 'Jouda',
-          firstname: 'Pepek',
-          surname: 'Namornik',
-          avatarIcon: 'P',
-        },
-        {
-          id: 2,
-          nickname: 'Jouda',
-          firstname: 'Pepek',
-          surname: 'Namornik',
-          avatarIcon: 'P',
-        },
-        {
-          id: 3,
-          nickname: 'Pids',
-          firstname: 'Paja',
-          surname: 'Kalašnikov',
-          avatarIcon: 'P',
-        },
-        {
-          id: 4,
-          nickname: 'Cavo',
-          firstname: 'Gajo',
-          surname: 'Dego',
-          avatarIcon: 'C',
-        },
-      ];
-    },
-    posts: () => {
+      return dbdocs;
       return [
         {
           id: 1,
@@ -193,7 +155,7 @@ const resolvers = {
           img: 'Zamek_pce_2.jpg',
           likes: 50,
           title: 'Zámek Pardubice',
-          comments: [],
+         
           user: {
             id: 1,
             nickname: 'Jouda',
@@ -210,7 +172,7 @@ const resolvers = {
           img: 'hrad.jpg',
           likes: 20,
           title: 'Hrad Okříšky',
-          comments: [],
+          
           user: {
             id: 2,
             nickname: 'Honza',
@@ -227,7 +189,7 @@ const resolvers = {
           img: 'hradjpg.jpg',
           likes: 35,
           title: 'Hrad Cigos',
-          comments: [],
+          
           user: {
             id: 3,
             nickname: 'Pids',
@@ -244,7 +206,7 @@ const resolvers = {
           img: 'rozhledna-vrbice1.jpg',
           likes: 60,
           title: 'Rozhledna gajo',
-          comments: [],
+          
           user: {
             id: 4,
             nickname: 'Cavo',
@@ -255,38 +217,7 @@ const resolvers = {
         },
       ];
     },
-    comments: () => {
-      return [
-        {
-          id: 1,
-          postId: 1,
-          userId: 1,
-          text: 'To je zajímavý příspěvek',
-          date: '20.11.2015',
-        },
-        {
-          id: 2,
-          postId: 2,
-          userId: 1,
-          text: 'Skvělý příspěvek!',
-          date: '22.12.2015',
-        },
-        {
-          id: 3,
-          postId: 3,
-          userId: 2,
-          text: 'Díky, líbilo se mi to!',
-          date: '16.1.2016',
-        },
-        {
-          id: 4,
-          postId: 4,
-          userId: 3,
-          text: 'Velmi pěkná fotka',
-          date: '25.2.2016',
-        },
-      ];
-    },
+    
   },
 };
 

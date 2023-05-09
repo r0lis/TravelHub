@@ -106,7 +106,7 @@ const Post: React.FC<Post> = (props) => {
         <CardHeader
           avatar={
             <Avatar aria-label="recipe" sx={{ bgcolor: red[500] }}>
-              {props.user.avatarIcon}
+              {props.avatarIcon}
             </Avatar>
           }
           l
@@ -115,7 +115,7 @@ const Post: React.FC<Post> = (props) => {
               <MoreVertIcon sx={{ fontSize: 20 }} />
             </IconButton>
           }
-          title={`${props.user.firstname} ${props.user.surname}`}
+          title={`${props.firstname} ${props.surname}`}
           subheader={props.date}
         />
         <CardMedia
@@ -163,14 +163,7 @@ const Post: React.FC<Post> = (props) => {
         </Typography>
         <Collapse in={expanded2} timeout="auto" unmountOnExit>
           <CardContent>
-            <List>
-              {props.comments.map((comments) => (
-                <ListItem key={comments.id}>
-                  <ListItemText primary={comments.text} />
-                </ListItem>
-              ))}
-              
-            </List>
+           
 
             <Box
               display="flex"
