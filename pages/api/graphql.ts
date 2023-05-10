@@ -36,18 +36,21 @@ const typeDefs = gql`
   }
 
   input PostInput {
-    userId: Int!
-    date: String!
+    
+   
     title: String!
     text: String!
-    likes: Int!
+   
     img: String!
   }
 
   type Mutation {
-    createPost(input: PostInput!): Post
-    deletePost(id: Int!): Boolean
-  }
+  createPost(input: PostInput!): Post
+  deletePost(id: Int!): Boolean
+  likePost(id: Int!): Boolean
+  unlikePost(id: Int!): Boolean
+}
+
 `;
 
 const posts: Array<Post> = [];
@@ -71,13 +74,15 @@ const db = firestore();
 const resolvers = {
   Mutation: {
     createPost: async (_: any, { input }: { input: PostInput }): Promise<Post> => {
+
+      
       const newPost = {
         id: Math.floor(Math.random() * 100000),
-        userId: input.userId,
-        date: input.date,
+        userId: Math.floor(Math.random() * 100000),
+        date: new Date().toLocaleString('cs-CZ', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }).replace(/\./g, '.').replace(',', ''),
         title: input.title,
         text: input.text,
-        likes: input.likes,
+        likes: 0,
         img: input.img,
         nickname: 'Jouda',
         firstname: 'Pepek',
@@ -86,19 +91,76 @@ const resolvers = {
       };
       const newPostRef = await db.collection('Post').add(newPost);
       const newPostId = newPostRef.id;
+      
       return { ...newPost, id: newPostId };
     },
     deletePost: async (_: any, { id }: { id: number }): Promise<boolean> => {
-      const postsRef = db.collection('Post');
-      const querySnapshot = await postsRef.where('id', '==', id).get();
-    
-      const deletePromises = querySnapshot.docs.map((doc) => doc.ref.delete());
-      await Promise.all(deletePromises);
-    
-      console.log(`Deleted ${querySnapshot.size} documents with ID ${id}`);
-      return true;
-    },
-    
+  const postsRef = db.collection('Post');
+  const querySnapshot = await postsRef.where('id', '==', id).get();
+
+  const deletePromises = querySnapshot.docs.map((doc) => doc.ref.delete());
+  await Promise.all(deletePromises);
+
+  console.log(`Deleted ${querySnapshot.size} documents with ID ${id}`);
+  return true;
+},
+likePost: async (_: any, { id }: { id: number }): Promise<boolean> => {
+  // Fetch the post from the database using the provided id
+  const postsRef = db.collection('Post');
+  const postSnapshot = await postsRef.where('id', '==', id).get();
+
+  // Check if the post exists
+  if (postSnapshot.empty) {
+    throw new Error('Post not found');
+  }
+
+  // Get the reference to the post document
+  const postDoc = postSnapshot.docs[0];
+  const postRef = postDoc.ref;
+
+  // Get the current likes count
+  const currentLikes = postDoc.data().likes || 0;
+
+  // Update the likes count in the database
+  const updatedLikes = currentLikes + 1;
+  await postRef.update({ likes: updatedLikes });
+
+  console.log(`Post ${id} liked`);
+
+  return true;
+},
+unlikePost: async (_: any, { id }: { id: number }): Promise<boolean> => {
+  // Fetch the post from the database using the provided id
+  const postsRef = db.collection('Post');
+  const postSnapshot = await postsRef.where('id', '==', id).get();
+
+  // Check if the post exists
+  if (postSnapshot.empty) {
+    throw new Error('Post not found');
+  }
+
+  // Get the reference to the post document
+  const postDoc = postSnapshot.docs[0];
+  const postRef = postDoc.ref;
+
+  // Get the current likes count
+  const currentLikes = postDoc.data().likes || 0;
+
+  // Ensure that likes count is not negative
+  if (currentLikes <= 0) {
+    throw new Error('Likes count cannot be negative');
+  }
+
+  // Update the likes count in the database
+  const updatedLikes = currentLikes - 1;
+  await postRef.update({ likes: updatedLikes });
+
+  console.log(`Post ${id} unliked`);
+
+  return true;
+},
+
+
   },
 
   Query: {

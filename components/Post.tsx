@@ -79,6 +79,17 @@ const DELETE_POST = gql`
   }
 `;
 
+const LIKE_POST = gql`
+  mutation LikePost($id: Int!) {
+    likePost(id: $id)
+  }
+`;
+const UNLIKE_POST = gql`
+  mutation UnlikePost($id: Int!) {
+    unlikePost(id: $id)
+  }
+`;
+
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 const Post: React.FC<Post> = (props) => {
   const [expanded, setExpanded] = useState(false);
@@ -86,7 +97,8 @@ const Post: React.FC<Post> = (props) => {
   const [isClicked, setIsClicked] = useState(false);
   const [likes, setLikes] = useState(props.likes);
   const [newComment, setNewComment] = useState('');
-  
+  const [isLiked, setIsLiked] = useState(false);
+
   const [deletePostMutation] = useMutation(DELETE_POST);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -99,6 +111,34 @@ const Post: React.FC<Post> = (props) => {
   .catch((error) => {
     console.error('Error deleting post:', error);
   });
+  };
+
+  const [likePostMutation] = useMutation(LIKE_POST);
+
+  const [unlikePostMutation] = useMutation(UNLIKE_POST);
+
+  const handleLikeClick = () => {
+    setIsLiked(!isLiked);
+    const likeCount = isLiked ? likes - 1 : likes + 1;
+    setLikes(likeCount);
+  
+    if (isLiked) {
+      unlikePostMutation({ variables: { id: props.id } })
+        .then(() => {
+          console.log('Post unliked successfully');
+        })
+        .catch((error) => {
+          console.error('Error unliking post:', error);
+        });
+    } else {
+      likePostMutation({ variables: { id: props.id } })
+        .then(() => {
+          console.log('Post liked successfully');
+        })
+        .catch((error) => {
+          console.error('Error liking post:', error);
+        });
+    }
   };
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -117,10 +157,7 @@ const Post: React.FC<Post> = (props) => {
     setExpanded2(!expanded2);
   };
 
-  const handleLikeClick = () => {
-    setIsClicked(!isClicked);
-    setLikes(isClicked ? likes - 1 : likes + 1);
-  };
+ 
 
   const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewComment(event.target.value);
@@ -179,11 +216,11 @@ const Post: React.FC<Post> = (props) => {
         </CardContent>
         <hr style={{ border: '1px solid #ccc' }} />
         <CardActions sx={{ paddingBottom: 0, paddingTop: 0 }} disableSpacing>
-          <IconButton aria-label="add to favorites" onClick={handleLikeClick}>
-            <FavoriteIcon
-              style={{ fontSize: 30, color: isClicked ? '#d50000' : 'inherit' }}
-            />
-          </IconButton>
+        <IconButton aria-label="add to favorites" onClick={handleLikeClick}>
+  <FavoriteIcon
+    style={{ fontSize: 30, color: isLiked ? '#d50000' : 'inherit' }}
+  />
+</IconButton>
           <ExpandMore
             sx={{ marginLeft: 0 }}
             onClick={handleExpandClick2}

@@ -49,11 +49,11 @@ const CREATE_POST_MUTATION = gql`
 export default function BasicModal() {
   const [open, setOpen] = React.useState(false);
   const [formData, setFormData] = React.useState({
-    userId: '',
-    date: '',
+    
+  
     title: '',
     text: '',
-    likes: '',
+   
     img: '',
   });
 
@@ -82,11 +82,9 @@ export default function BasicModal() {
       const { data } = await createPost({
         variables: {
           input: {
-            userId: parseInt(formData.userId),
-            date: formData.date,
             title: formData.title,
             text: formData.text,
-            likes: parseInt(formData.likes),
+            
             img: formData.img,
           },
         },
@@ -96,11 +94,9 @@ export default function BasicModal() {
 
       // Reset form data
       setFormData({
-        userId: '',
-        date: '',
         title: '',
         text: '',
-        likes: '',
+       
         img: '',
       });
 
@@ -127,18 +123,7 @@ export default function BasicModal() {
             Přidat příspěvek
           </Typography>
           <form onSubmit={handleSubmit}>
-            <TextField
-              name="userId"
-              label="User ID"
-              value={formData.userId}
-              onChange={handleInputChange}
-            />
-            <TextField
-              name="date"
-              label="Date"
-              value={formData.date}
-              onChange={handleInputChange}
-            />
+            
             <TextField
               name="title"
               label="Title"
@@ -151,12 +136,7 @@ export default function BasicModal() {
               value={formData.text}
               onChange={handleInputChange}
             />
-            <TextField
-              name="likes"
-              label="Likes"
-              value={formData.likes}
-              onChange={handleInputChange}
-            />
+           
             <TextField
               name="img"
               label="Image URL"
