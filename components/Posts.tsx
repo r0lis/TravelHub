@@ -39,6 +39,7 @@ const RowAndColumnSpacing: React.FC = () => {
         <Grid container rowSpacing={15} columnSpacing={{ xs: 2, sm: 3, md: 4 }}>
           {data?.posts.map((post: any) => (
             <Grid xs={6} key={post.id}>
+              
               <Post {...post}  />
             </Grid>
           ))}

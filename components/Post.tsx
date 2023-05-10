@@ -1,4 +1,5 @@
-import { gql, useQuery } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
+
 import CommentIcon from '@mui/icons-material/Comment';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -18,10 +19,14 @@ import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
+import { Menu, MenuItem } from '@mui/material';
+
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import React, { ReactNode, useState } from 'react';
+
+
 
 interface ExpandMoreProps extends IconButtonProps {
   expand?: boolean;
@@ -38,6 +43,8 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
     duration: theme.transitions.duration.shortest,
   }),
 }));
+
+
 interface Post {
   id: number;
   nickname: string;
@@ -66,6 +73,12 @@ interface Comment {
   date: ReactNode;
 }
 
+const DELETE_POST = gql`
+  mutation DeletePost($id: Int!) {
+    deletePost(id: $id)
+  }
+`;
+
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 const Post: React.FC<Post> = (props) => {
   const [expanded, setExpanded] = useState(false);
@@ -73,6 +86,28 @@ const Post: React.FC<Post> = (props) => {
   const [isClicked, setIsClicked] = useState(false);
   const [likes, setLikes] = useState(props.likes);
   const [newComment, setNewComment] = useState('');
+  
+  const [deletePostMutation] = useMutation(DELETE_POST);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const handleDelete = () => {
+    handleMenuClose();
+    deletePostMutation({ variables: {  id: props.id} })
+  .then(() => {
+    console.log('Post deleted successfully');
+  })
+  .catch((error) => {
+    console.error('Error deleting post:', error);
+  });
+  };
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -81,10 +116,12 @@ const Post: React.FC<Post> = (props) => {
   const handleExpandClick2 = () => {
     setExpanded2(!expanded2);
   };
+
   const handleLikeClick = () => {
     setIsClicked(!isClicked);
     setLikes(isClicked ? likes - 1 : likes + 1);
   };
+
   const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewComment(event.target.value);
   };
@@ -111,9 +148,20 @@ const Post: React.FC<Post> = (props) => {
           }
           l
           action={
-            <IconButton aria-label="settings">
-              <MoreVertIcon sx={{ fontSize: 20 }} />
-            </IconButton>
+            <>
+              <IconButton aria-label="settings" onClick={handleMenuOpen}>
+                <MoreVertIcon sx={{ fontSize: 20 }} />
+              </IconButton>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleDelete}
+              >
+                <MenuItem onClick={handleDelete}>
+                  Delete
+                </MenuItem>
+              </Menu>
+            </>
           }
           title={`${props.firstname} ${props.surname}`}
           subheader={props.date}
