@@ -36,23 +36,21 @@ const typeDefs = gql`
   }
 
   input PostInput {
-    
-   
     title: String!
     text: String!
-   
+
     img: String!
   }
 
   type Mutation {
-  createPost(input: PostInput!): Post
-  deletePost(id: Int!): Boolean
-  likePost(id: Int!): Boolean
-  unlikePost(id: Int!): Boolean
-}
-
+    createPost(input: PostInput!): Post
+    deletePost(id: Int!): Boolean
+    likePost(id: Int!): Boolean
+    unlikePost(id: Int!): Boolean
+  }
 `;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, no-use-before-define
 const posts: Array<Post> = [];
 
 interface Post {
@@ -73,13 +71,25 @@ const db = firestore();
 
 const resolvers = {
   Mutation: {
-    createPost: async (_: any, { input }: { input: PostInput }): Promise<Post> => {
-
-      
+    createPost: async (
+      _: any,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment, spaced-comment
+      //@ts-ignore
+      { input }: { input: PostInput },
+    ): Promise<Post> => {
       const newPost = {
-        id: Math.floor(Math.random() * 100000),
-        userId: Math.floor(Math.random() * 100000),
-        date: new Date().toLocaleString('cs-CZ', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }).replace(/\./g, '.').replace(',', ''),
+        id: Math.floor(Math.random() * 100_000),
+        userId: Math.floor(Math.random() * 100_000),
+        date: new Date()
+          .toLocaleString('cs-CZ', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+          })
+          .replace(/\./g, '.')
+          .replace(',', ''),
         title: input.title,
         text: input.text,
         likes: 0,
@@ -91,84 +101,87 @@ const resolvers = {
       };
       const newPostRef = await db.collection('Post').add(newPost);
       const newPostId = newPostRef.id;
-      
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment, spaced-comment
+      //@ts-ignorenpm
       return { ...newPost, id: newPostId };
     },
     deletePost: async (_: any, { id }: { id: number }): Promise<boolean> => {
-  const postsRef = db.collection('Post');
-  const querySnapshot = await postsRef.where('id', '==', id).get();
+      const postsRef = db.collection('Post');
+      const querySnapshot = await postsRef.where('id', '==', id).get();
 
-  const deletePromises = querySnapshot.docs.map((doc) => doc.ref.delete());
-  await Promise.all(deletePromises);
+      const deletePromises = querySnapshot.docs.map((doc) => doc.ref.delete());
+      await Promise.all(deletePromises);
 
-  console.log(`Deleted ${querySnapshot.size} documents with ID ${id}`);
-  return true;
-},
-likePost: async (_: any, { id }: { id: number }): Promise<boolean> => {
-  // Fetch the post from the database using the provided id
-  const postsRef = db.collection('Post');
-  const postSnapshot = await postsRef.where('id', '==', id).get();
+      console.log(`Deleted ${querySnapshot.size} documents with ID ${id}`);
+      return true;
+    },
+    likePost: async (_: any, { id }: { id: number }): Promise<boolean> => {
+      // Fetch the post from the database using the provided id
+      const postsRef = db.collection('Post');
+      const postSnapshot = await postsRef.where('id', '==', id).get();
 
-  // Check if the post exists
-  if (postSnapshot.empty) {
-    throw new Error('Post not found');
-  }
+      // Check if the post exists
+      if (postSnapshot.empty) {
+        throw new Error('Post not found');
+      }
 
-  // Get the reference to the post document
-  const postDoc = postSnapshot.docs[0];
-  const postRef = postDoc.ref;
+      // Get the reference to the post document
+      const postDoc = postSnapshot.docs[0];
+      const postRef = postDoc.ref;
 
-  // Get the current likes count
-  const currentLikes = postDoc.data().likes || 0;
+      // Get the current likes count
+      const currentLikes = postDoc.data().likes || 0;
 
-  // Update the likes count in the database
-  const updatedLikes = currentLikes + 1;
-  await postRef.update({ likes: updatedLikes });
+      // Update the likes count in the database
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+      const updatedLikes = currentLikes + 1;
+      await postRef.update({ likes: updatedLikes });
 
-  console.log(`Post ${id} liked`);
+      console.log(`Post ${id} liked`);
 
-  return true;
-},
-unlikePost: async (_: any, { id }: { id: number }): Promise<boolean> => {
-  // Fetch the post from the database using the provided id
-  const postsRef = db.collection('Post');
-  const postSnapshot = await postsRef.where('id', '==', id).get();
+      return true;
+    },
+    unlikePost: async (_: any, { id }: { id: number }): Promise<boolean> => {
+      // Fetch the post from the database using the provided id
+      const postsRef = db.collection('Post');
+      const postSnapshot = await postsRef.where('id', '==', id).get();
 
-  // Check if the post exists
-  if (postSnapshot.empty) {
-    throw new Error('Post not found');
-  }
+      // Check if the post exists
+      if (postSnapshot.empty) {
+        throw new Error('Post not found');
+      }
 
-  // Get the reference to the post document
-  const postDoc = postSnapshot.docs[0];
-  const postRef = postDoc.ref;
+      // Get the reference to the post document
+      const postDoc = postSnapshot.docs[0];
+      const postRef = postDoc.ref;
 
-  // Get the current likes count
-  const currentLikes = postDoc.data().likes || 0;
+      // Get the current likes count
+      const currentLikes = postDoc.data().likes || 0;
 
-  // Ensure that likes count is not negative
-  if (currentLikes <= 0) {
-    throw new Error('Likes count cannot be negative');
-  }
+      // Ensure that likes count is not negative
+      if (currentLikes <= 0) {
+        throw new Error('Likes count cannot be negative');
+      }
 
-  // Update the likes count in the database
-  const updatedLikes = currentLikes - 1;
-  await postRef.update({ likes: updatedLikes });
+      // Update the likes count in the database
+      const updatedLikes = currentLikes - 1;
+      await postRef.update({ likes: updatedLikes });
 
-  console.log(`Post ${id} unliked`);
+      console.log(`Post ${id} unliked`);
 
-  return true;
-},
-
-
+      return true;
+    },
   },
 
   Query: {
     posts: async () => {
-      const postsRef = db.collection('Post') as FirebaseFirestore.CollectionReference<DbUser>;
+      const postsRef = db.collection(
+        'Post',
+      ) as FirebaseFirestore.CollectionReference<DbUser>;
       const docsRefs = await postsRef.listDocuments();
       const docsSnapshotPromises = docsRefs.map((doc) => doc.get());
       const docsSnapshots = await Promise.all(docsSnapshotPromises);
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const dbdocs = docsSnapshots.map((doc) => doc.data()!);
       console.log(dbdocs);
       return dbdocs;

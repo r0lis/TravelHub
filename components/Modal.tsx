@@ -49,11 +49,8 @@ const CREATE_POST_MUTATION = gql`
 export default function BasicModal() {
   const [open, setOpen] = React.useState(false);
   const [formData, setFormData] = React.useState({
-    
-  
     title: '',
     text: '',
-   
     img: '',
   });
 
@@ -84,7 +81,6 @@ export default function BasicModal() {
           input: {
             title: formData.title,
             text: formData.text,
-            
             img: formData.img,
           },
         },
@@ -96,7 +92,6 @@ export default function BasicModal() {
       setFormData({
         title: '',
         text: '',
-       
         img: '',
       });
 
@@ -123,32 +118,44 @@ export default function BasicModal() {
             Přidat příspěvek
           </Typography>
           <form onSubmit={handleSubmit}>
-            
-            <TextField
-              name="title"
-              label="Title"
-              value={formData.title}
-              onChange={handleInputChange}
-            />
-            <TextField
-              name="text"
-              label="Text"
-              value={formData.text}
-              onChange={handleInputChange}
-            />
-           
-            <TextField
-              name="img"
-              label="Image URL"
-              value={formData.img}
-              onChange={handleInputChange}
-            />
-            <Button type="submit" variant="contained" color="primary">
-              Create Post
-            </Button>
-          </form>
-        </Box>
-      </Modal>
-    </Box>
-  );
-}
+            <Box sx={{ marginBottom: '1rem' }}>
+              <TextField
+                name="title"
+                label="Title"
+                value={formData.title}
+                onChange={handleInputChange}
+                fullWidth
+                variant="outlined"
+              />
+   </Box>
+   <Box sx={{ marginBottom: '1rem' }}>
+   <TextField
+                name="text"
+                label="Text"
+                value={formData.text}
+                onChange={handleInputChange}
+                fullWidth
+                multiline
+                rows={4}
+                variant="outlined"
+              />
+   </Box>
+   <Box sx={{ marginBottom: '1rem' }}>
+   <TextField
+                name="img"
+                label="Image URL"
+                value={formData.img}
+                onChange={handleInputChange}
+                fullWidth
+                variant="outlined"
+              />
+   </Box>
+   <Button type="submit" variant="contained" color="primary">
+   Create Post
+   </Button>
+   </form>
+   </Box>
+   </Modal>
+   </Box>
+   );
+   }
